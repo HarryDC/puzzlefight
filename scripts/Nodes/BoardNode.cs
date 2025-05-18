@@ -18,6 +18,7 @@ public partial class BoardNode : Node2D
     
     private Common.Board _board;
     private Array2D<Sprite2D> _sprites;
+    private Vector2 _dropOrigin;
     
     public override void _Input(InputEvent inputEvent)
     {
@@ -50,13 +51,7 @@ public partial class BoardNode : Node2D
             }
             else
             { 
-                var target = new Vector2I(x, y);
-                _board.Swap(_selected.Value, target);
-                var sprite1 = _sprites[_selected.Value];
-                var sprite2 = _sprites[target];
-                sprite1.Position = IndexToPosition(target);
-                sprite2.Position = IndexToPosition(_selected.Value);
-                _sprites.Swap(_selected.Value, target); ;
+                Swap(_selected.Value, new Vector2I(x, y));
                 _selected = null;
                 SelectionSprite.Visible = false;
             }            
@@ -70,20 +65,59 @@ public partial class BoardNode : Node2D
      
         _selected = null;
         SelectionSprite.Visible = false;
+
+        _dropOrigin = new Vector2(0, -Height * Spacing);
         
-        for (var x = 0; x < _board.Width; x++)
+        var dropTween = CreateTween();
+        dropTween.SetParallel(true);
+        
+        for (var x = 0; x < Width; x++)
         {
-            for (var y = 0; y < _board.Height; y++)
+            var columnTween = CreateTween(); 
+            columnTween.SetTrans(Tween.TransitionType.Cubic);
+            columnTween.SetParallel(true);
+
+            var delay = 0.25 * x; 
+            for (var y = 0; y < Height; y++)
             {
                 var type = _board.Data[x, y];
                 var sprite = new Sprite2D();
                 sprite.Texture = GD.Load<Texture2D>($"res://assets/gems/{type}.png");
                 var pos = new Vector2(x, y) * Spacing;
-                sprite.Position = pos;
                 _sprites[x,y] = sprite;
                 AddChild(sprite);
+                
+                sprite.Position = _dropOrigin + pos;
+                
+                columnTween.TweenProperty(sprite, "position", pos, .5f).SetDelay(delay + 0.05 * (Height - y));
+                GD.Print("from", sprite.Position, "to", pos);
             }
+            dropTween.TweenSubtween(columnTween);
         }
+    }
+
+    // Performs animations for swap and finalizes board when animations are done
+    private void Swap(Vector2I source, Vector2I target)
+    {
+        var sprite1 = _sprites[source];
+        var sprite2 = _sprites[target];
+
+        var motion = CreateTween();
+        motion.SetParallel(true);
+        motion.SetTrans(Tween.TransitionType.Cubic);
+
+        motion.TweenProperty(sprite1, "position", IndexToPosition(target), 0.25f);
+        motion.TweenProperty(sprite2, "position", IndexToPosition(source), 0.25f);
+        
+        var mainTween = CreateTween();
+        mainTween.TweenSubtween(motion);
+        mainTween.TweenCallback(Callable.From(() =>
+            {
+                _board.Swap(source, target);
+                _sprites.Swap(source, target);
+                GD.Print("swapped {0} {1}", source, target);
+            }
+        ));
     }
     
     private Vector2 IndexToPosition(Vector2I index)
