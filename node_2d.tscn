@@ -1,6 +1,16 @@
-[gd_scene load_steps=2 format=3 uid="uid://dvxfom0n1iw03"]
+[gd_scene load_steps=3 format=3 uid="uid://dvxfom0n1iw03"]
 
 [ext_resource type="Script" uid="uid://dvb6loya25b6w" path="res://scripts/Nodes/BoardNode.cs" id="1_wtcfe"]
+[ext_resource type="Texture2D" uid="uid://bkcc760iv72f0" path="res://assets/gems/GemBlue.png" id="2_0e48y"]
 
-[node name="Board" type="Node2D"]
+[node name="BoardScene" type="Node"]
+
+[node name="Board" type="Node2D" parent="." node_paths=PackedStringArray("SelectionSprite")]
+position = Vector2(260, 88)
 script = ExtResource("1_wtcfe")
+SelectionSprite = NodePath("GemBlue")
+
+[node name="GemBlue" type="Sprite2D" parent="Board"]
+z_index = 1
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_0e48y")
