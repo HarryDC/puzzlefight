@@ -35,14 +35,12 @@ public partial class BoardNode : Node2D
             
             // Convert mouse position to grid position
             var local = mouseEvent.Position - Position + new Vector2(Spacing * .5f, Spacing * .5f);
-            GD.Print("mouse button event at ", local);
             if (local.X < 0 || local.Y < 0 || local.X > Width * Spacing || local.Y > Height * Spacing)
             {
                 return;
             }
             var x = (int)Math.Floor(local.X / Spacing);
             var y = (int)Math.Floor(local.Y / Spacing);
-            GD.Print("mouse button event at {0} {1}", x, y);
             if (_selected == null)
             {
                 _selected = new Vector2I(x, y);
@@ -51,7 +49,7 @@ public partial class BoardNode : Node2D
             }
             else
             { 
-                Swap(_selected.Value, new Vector2I(x, y));
+                StartSwap(_selected.Value, new Vector2I(x, y));
                 _selected = null;
                 SelectionSprite.Visible = false;
             }            
@@ -97,27 +95,51 @@ public partial class BoardNode : Node2D
     }
 
     // Performs animations for swap and finalizes board when animations are done
-    private void Swap(Vector2I source, Vector2I target)
+    private void StartSwap(Vector2I source, Vector2I target)
     {
-        var sprite1 = _sprites[source];
-        var sprite2 = _sprites[target];
+        if (_board.IsValid(source, target))
+        {
+            // On valid swap, call EndSwap as the next step
+            GD.Print($"valid swap start {source} {target}");
+            DoSwap(source, target, Callable.From(() =>
+                {
+                    EndSwap(source, target);
+                }
+            ));
+        }
+        else
+        {
+            // On invalid swap, just swap the sprites back again
+            DoSwap(source, target, Callable.From(() =>
+                {
+                    GD.Print($"invalid swap start {source} {target}");
+                    DoSwap(source, target, new Callable());
+                }
+            ));
+        }
+    }
+    
+    private void EndSwap(Vector2I source, Vector2I target)
+    {
+        _board.Swap(source, target);
+        GD.Print($"swap complete {source} {target}");;
+    }
 
+    private void DoSwap(Vector2I source, Vector2I target, Callable callback)
+    {
         var motion = CreateTween();
         motion.SetParallel(true);
         motion.SetTrans(Tween.TransitionType.Cubic);
 
+        var sprite1 = _sprites[source];
+        var sprite2 = _sprites[target];
         motion.TweenProperty(sprite1, "position", IndexToPosition(target), 0.25f);
         motion.TweenProperty(sprite2, "position", IndexToPosition(source), 0.25f);
         
         var mainTween = CreateTween();
         mainTween.TweenSubtween(motion);
-        mainTween.TweenCallback(Callable.From(() =>
-            {
-                _board.Swap(source, target);
-                _sprites.Swap(source, target);
-                GD.Print("swapped {0} {1}", source, target);
-            }
-        ));
+        mainTween.TweenCallback(callback);   
+        _sprites.Swap(source, target);
     }
     
     private Vector2 IndexToPosition(Vector2I index)

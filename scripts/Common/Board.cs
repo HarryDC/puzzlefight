@@ -67,50 +67,8 @@ public class Board
                 RefreshBoard();
             }
         }
-        
-        // // Logic is not quite correct, we get multiple result 
-        // // calls when a match triggers another match after it's 
-        // // been removed
-        // if (_animating == 0 && _needUpdate == false && _matchData.Count > 0)
-        // {
-        //     if (_oldMatchCount == _matchData.Count)
-        //     {
-        //         _manager.AddAction(new Actions.Result(_matchData));
-        //         _matchData = new();
-        //         _oldMatchCount = 0;
-        //     }
-        //     else
-        //     {
-        //         _oldMatchCount = _matchData.Count;
-        //     }
-        // }
-
     }
-
-    // public void AnimatedSwap(Vector2I a, Vector2I b)
-    // {
-    //     int aDiff = Math.Abs(a.X - b.X);
-    //     int bDiff = Math.Abs(a.Y - b.Y);
-    //
-    //     if (aDiff > 1 || bDiff > 1 || aDiff == bDiff) return;
-    //     if (!IsValid(a, b) && !IsValid(b, a))
-    //     {
-    //         return;
-    //     }
-    //
-    //     Stone pieceA = _data[a.X, a.Y];
-    //     Stone pieceB = _data[b.X, b.Y];
-    //     _data[a.X, a.Y] = pieceB;
-    //     _data[b.X, b.Y] = pieceA;
-    //
-    //     var start = pieceA.transform.position;
-    //     var end = pieceB.transform.position;
-    //
-    //     _animating += 2;
-    //     StartCoroutine(Animator.Move(pieceA.gameObject, start, end, SwapTime, MoveUpdate));
-    //     StartCoroutine(Animator.Move(pieceB.gameObject, end, start, SwapTime, MoveUpdate));
-    // }
-
+    
     public bool Swap(Vector2I a, Vector2I b)
     {
         int aDiff = Math.Abs(a.X - b.X);
@@ -130,25 +88,7 @@ public class Board
         _needUpdate = true;
         return true;
     }
-
-    // public void MovePieceOnBoard(Vector2I from, Vector2I to)
-    // {
-    //     Debug.Assert(_data[to.X, to.Y] == null);
-    //
-    //     Stone piece = _data[from.X, from.Y];
-    //     _data[from.X, from.Y] = null;
-    //     _data[to.X, to.Y] = piece;
-    //     var start = piece.transform.position;
-    //     var end = new Vector3(to.X, to.Y, start.z);
-    //
-    //     _animating += 1;
-    //     StartCoroutine(
-    //         Animator.Move(piece.gameObject, start, end, 
-    //             DropSpeedPerSquare * (from.Y - to.Y), MoveUpdate)
-    //     );
-    // }
-
-
+    
     private void DropNewPiece(StoneTypeEnum stone, Vector2I from, Vector2I to)
     {
         Debug.Assert(_data[to.X, to.Y] == StoneTypeEnum.None);
@@ -326,7 +266,6 @@ public class Board
                 // For now, just deactivate
                 if (_matches[i,j])
                 {
-                    cache.Add(_data[i, j]);
                     _data[i, j] = StoneTypeEnum.None;
                     moveDist += 1;
                 } else if (moveDist > 0)
