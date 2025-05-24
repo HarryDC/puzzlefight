@@ -58,7 +58,7 @@ public class Board
     {
         if (_needUpdate)
         {
-            UpdateMatches();
+            GetMatches();
             RemoveMatching();
             _needUpdate = false;
             var moves = GetAllMoves();
@@ -196,7 +196,7 @@ public class Board
     /// Fill internal data with stones that match other stones
     /// </summary>
     /// <returns>true if there where any matches, false otherwise</returns>
-    bool UpdateMatches()
+    public (List<MatchData>, Array2D<bool>) GetMatches()
     {
         bool hasMatches = false;
         ClearMatches();
@@ -243,7 +243,7 @@ public class Board
                 }
             }
         }
-        return _matchData.Count > 0;
+        return (_matchData, _matches);
     }
 
     private void ClearMatches()

@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using PuzzleFight.Common;
 
 namespace PuzzleFight.Nodes;
@@ -122,7 +123,8 @@ public partial class BoardNode : Node2D
     private void EndSwap(Vector2I source, Vector2I target)
     {
         _board.Swap(source, target);
-        GD.Print($"swap complete {source} {target}");;
+        var (matchData,matches)  = _board.GetMatches();
+        DoRemove(matches);
     }
 
     private void DoSwap(Vector2I source, Vector2I target, Callable callback)
@@ -141,6 +143,33 @@ public partial class BoardNode : Node2D
         mainTween.TweenCallback(callback);   
         _sprites.Swap(source, target);
     }
+    
+    
+    private void DoRemove(Array2D<bool> matches)
+    {
+        var motion = CreateTween();
+        motion.SetParallel(true);
+        int count = 0;
+        for (var x = 0; x < Width; x++)
+        {
+            for (var y = 0; y < Height; y++)
+            {
+                if (matches[x, y])
+                {
+                    var sprite = _sprites[x, y];
+                    var spriteTween = CreateTween();
+                    spriteTween.SetTrans(Tween.TransitionType.Cubic);
+                    spriteTween.TweenProperty(sprite, "scale",  new Vector2(0, 0), 0.25f).SetDelay(0.1 * count);
+                    motion.TweenSubtween(spriteTween);
+                    
+                    // TODO on done recycle sprite
+                    // TODO when done refill board
+                    count++;
+                }                
+            }
+        }
+    }
+
     
     private Vector2 IndexToPosition(Vector2I index)
     {
