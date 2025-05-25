@@ -19,7 +19,9 @@ namespace PuzzleFight.Common
         public static StoneTypeEnum Random()
         {
             if (Values.Length == 1) return (StoneTypeEnum)Values.GetValue(0);
-            return (StoneTypeEnum)Values.GetValue(GD.Randi() % (Values.Length - 1));
+            var stone = (StoneTypeEnum)Values.GetValue(GD.Randi() % (Values.Length - 1));
+            GD.Print($"New Stone {stone}");
+            return stone;
         } 
     }
 }

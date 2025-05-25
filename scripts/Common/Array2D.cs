@@ -106,5 +106,12 @@ namespace PuzzleFight.Common
         {
             _data.ForEach(action);
         }
+
+        public Array2D<T> DeepCopy()
+        {
+            var result = new Array2D<T>(_width, _height, _default);
+            result._data = new List<T>(_data);
+            return result;
+        }
     }
 }

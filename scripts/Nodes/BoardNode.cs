@@ -13,12 +13,15 @@ public partial class BoardNode : Node2D
     [Export] public float Spacing { get; set; } = 120f;
     
     [Export] Sprite2D SelectionSprite { get; set; }
-
+    
+    [Export] float DropTime { get; set; } = 0.1f;
+    [Export] float SwapTime { get; set; } = 0.25f;
     
     private Vector2I? _selected;
     
     private Common.Board _board;
     private Array2D<Sprite2D> _sprites;
+    private Stack<Sprite2D> _removedSprites = new();
     private Vector2 _dropOrigin;
     
     public override void _Input(InputEvent inputEvent)
@@ -88,7 +91,7 @@ public partial class BoardNode : Node2D
                 
                 sprite.Position = _dropOrigin + pos;
                 
-                columnTween.TweenProperty(sprite, "position", pos, .5f).SetDelay(delay + 0.05 * (Height - y));
+                columnTween.TweenProperty(sprite, "position", pos, DropTime * Height).SetDelay(delay + 0.05 * (Height - y));
                 GD.Print("from", sprite.Position, "to", pos);
             }
             dropTween.TweenSubtween(columnTween);
@@ -127,6 +130,70 @@ public partial class BoardNode : Node2D
         DoRemove(matches);
     }
 
+    private void RefreshBoard(Array2D<bool> oldMatches)
+    {
+        var matches = oldMatches.DeepCopy();
+        // Updates the board with the state we are trying to match here
+        _board.RemoveMatching();
+        
+        var mainTween = CreateTween();
+        var motionTween = CreateTween();
+        motionTween.SetTrans(Tween.TransitionType.Cubic);
+        motionTween.SetParallel(true);
+        
+        // Drop current stones into gap
+        // Drop new stones from reserve
+        var didDrop = false;
+        int columnDelay = 0;
+        for (var x = 0; x < Width; x++)
+        {
+            if (didDrop)
+            {
+                didDrop = false;
+                columnDelay+=2;
+            }
+            int delay = columnDelay;
+            int dropHeight = 0;
+            for (var y = Height - 1; y >= 0; y--)
+            {
+                if (matches[x, y])
+                {
+                    didDrop = true;
+                    dropHeight+=1;
+                }
+                else if (dropHeight > 0)
+                {
+                    var sprite = _sprites[x, y];
+                    var spriteTween = CreateTween();
+                    spriteTween.SetTrans(Tween.TransitionType.Cubic);
+                    spriteTween.TweenProperty(sprite, "position", new Vector2(x, y + dropHeight) * Spacing, DropTime * dropHeight)
+                        .SetDelay(0.1 * delay);;
+                    motionTween.TweenSubtween(spriteTween);
+                    _sprites[x, y + dropHeight] = sprite;
+                    ++delay;
+                }
+            }
+            for (int j = dropHeight-1; j >= 0; --j)
+            {
+                var newColor = _board.Data[x, j];
+                var newSprite = _removedSprites.Pop();
+                newSprite.Texture = GD.Load<Texture2D>($"res://assets/gems/{newColor}.png");
+                _sprites[x, j] = newSprite;
+
+                newSprite.Visible = true;
+                newSprite.Scale = new Vector2(1, 1);
+                newSprite.Position = IndexToPosition(x, -dropHeight + j);
+                var newPos = IndexToPosition(x,j);
+                var spriteTween = CreateTween();
+                spriteTween.SetTrans(Tween.TransitionType.Cubic);
+                spriteTween.TweenProperty(newSprite, "position", newPos, DropTime * dropHeight).SetDelay(0.1 * delay);;
+                motionTween.TweenSubtween(spriteTween);
+                ++delay;
+            }
+        }
+        mainTween.TweenSubtween(motionTween);
+    }
+
     private void DoSwap(Vector2I source, Vector2I target, Callable callback)
     {
         var motion = CreateTween();
@@ -135,8 +202,8 @@ public partial class BoardNode : Node2D
 
         var sprite1 = _sprites[source];
         var sprite2 = _sprites[target];
-        motion.TweenProperty(sprite1, "position", IndexToPosition(target), 0.25f);
-        motion.TweenProperty(sprite2, "position", IndexToPosition(source), 0.25f);
+        motion.TweenProperty(sprite1, "position", IndexToPosition(target), SwapTime);
+        motion.TweenProperty(sprite2, "position", IndexToPosition(source), SwapTime);
         
         var mainTween = CreateTween();
         mainTween.TweenSubtween(motion);
@@ -147,8 +214,10 @@ public partial class BoardNode : Node2D
     
     private void DoRemove(Array2D<bool> matches)
     {
-        var motion = CreateTween();
-        motion.SetParallel(true);
+        var mainTween = CreateTween();
+        var motionTween = CreateTween();
+        motionTween.SetParallel(true);
+        motionTween.SetTrans(Tween.TransitionType.Cubic);
         int count = 0;
         for (var x = 0; x < Width; x++)
         {
@@ -158,22 +227,26 @@ public partial class BoardNode : Node2D
                 {
                     var sprite = _sprites[x, y];
                     var spriteTween = CreateTween();
-                    spriteTween.SetTrans(Tween.TransitionType.Cubic);
-                    spriteTween.TweenProperty(sprite, "scale",  new Vector2(0, 0), 0.25f).SetDelay(0.1 * count);
-                    motion.TweenSubtween(spriteTween);
-                    
-                    // TODO on done recycle sprite
-                    // TODO when done refill board
+                    spriteTween.TweenProperty(sprite, "scale",  new Vector2(0, 0), DropTime).SetDelay(0.1 * count);
+                    motionTween.TweenSubtween(spriteTween);
+                    _removedSprites.Push(sprite);
                     count++;
                 }                
             }
         }
+        mainTween.TweenSubtween(motionTween);
+        mainTween.TweenCallback(Callable.From(() => RefreshBoard(matches)));
     }
 
     
     private Vector2 IndexToPosition(Vector2I index)
     {
         return new Vector2(index.X, index.Y) * Spacing;
+    }
+    
+    private Vector2 IndexToPosition(int x, int y)
+    {
+        return new Vector2(x, y) * Spacing;
     }
     
 }

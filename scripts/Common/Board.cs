@@ -19,22 +19,10 @@ public class Board
     // Board sized, contains true if the piece at that location
     // matches anything
     private Array2D<bool> _matches;
-
+    public Array2D<bool> Matches => _matches;
+    
     private List<MatchData> _matchData = new();
-
-    // Number of animations in flight
-    private int _animating = 0;
-
-    // Number of Matches from the previous resolution
-    private int _oldMatchCount = 0;
     
-    private volatile bool _needUpdate;
-    
-    public bool Dirty
-    {
-        set => _needUpdate = true;
-    }
-
     // Start is called before the first frame update
     // Lower Left is 0/0
     public Board(int width, int height)
@@ -50,21 +38,6 @@ public class Board
             for (int j = 0; j < Height; ++j)
             {
                 _data[i, j] = SuggestNewColor(new Vector2I(i, j));
-            }
-        }
-    }
-
-    void Update()
-    {
-        if (_needUpdate)
-        {
-            GetMatches();
-            RemoveMatching();
-            _needUpdate = false;
-            var moves = GetAllMoves();
-            if (moves.Count == 0)
-            {
-                RefreshBoard();
             }
         }
     }
@@ -85,7 +58,6 @@ public class Board
         _data[a.X, a.Y] = pieceB;
         _data[b.X, b.Y] = pieceA;
 
-        _needUpdate = true;
         return true;
     }
     
@@ -96,15 +68,6 @@ public class Board
         StoneTypeEnum color = SuggestNewColor(to);
         stone = color;
 
-        // TODO Remove
-        // var start = new Vector3(from.X, from.Y, stone.transform.position.z);
-        // var end = new Vector3(to.X, to.Y, stone.transform.position.z);
-        //
-        // _animating += 1;
-        // StartCoroutine(
-        //     Animator.Move(stone.gameObject, start, end,
-        //         DropSpeedPerSquare * (from.Y - to.Y), MoveUpdate)
-        // );
     }
     
     /// <summary>
@@ -198,7 +161,6 @@ public class Board
     /// <returns>true if there where any matches, false otherwise</returns>
     public (List<MatchData>, Array2D<bool>) GetMatches()
     {
-        bool hasMatches = false;
         ClearMatches();
 
         for (int y = 0; y < Height; ++y)
@@ -254,13 +216,12 @@ public class Board
     /// <summary>
     /// Removes all matches from the board and sets up a new stones to drop down
     /// </summary>
-    void RemoveMatching()
+    public void RemoveMatching()
     {
-        List<StoneTypeEnum> cache = new();
         for (int i = 0; i < Width; ++i)
         {
             int moveDist = 0;
-            for (int j = 0; j < Height; ++j)
+            for (int j = Height-1; j >=0 ; --j)
             {
                 // Clean up the piece that was at the matching location
                 // For now, just deactivate
@@ -270,17 +231,17 @@ public class Board
                     moveDist += 1;
                 } else if (moveDist > 0)
                 {
-                    //MovePieceOnBoard(new Vector2I(i,j), new Vector2I(i, j - moveDist));
+                    _data[i, j+moveDist] = _data[i, j];
+                    _data[i, j] = StoneTypeEnum.None;
                 }
             }
-            int count = 0;
-            foreach (var stone in cache)
+            for (int j = moveDist - 1; j >= 0; --j)
             {
-                DropNewPiece(stone, new Vector2I(i, Height + count), new Vector2I(i, Height + count - moveDist));
-                ++count;
+                var stone = SuggestNewColor(new Vector2I(i, j));
+                _data[i, j] = stone;
             }
-            cache.Clear();
         }
+        ClearMatches();
     }
 
     public void RefreshBoard()
@@ -297,15 +258,6 @@ public class Board
                 to.Y = y;
                 var stone = _data[to];
                 stone = SuggestNewColor(to);
-
-                // var start = new Vector3(to.X, to.Y+Height, stone.transform.position.z);
-                // var end = new Vector3(to.X, to.Y, stone.transform.position.z);
-                //
-                // _animating += 1;
-                // StartCoroutine(
-                //     Animator.Move(stone.gameObject, start, end, 
-                //         DropSpeedPerSquare * (start.Y - end.Y), MoveUpdate)
-                // );
             }
         }
     }
@@ -351,5 +303,21 @@ public class Board
     public Vector3 BoardToPosition(Vector2I gridPos)
     {
         return new Vector3(gridPos.X, gridPos.Y, 0.0f);
+    }
+
+    public void Dump()
+    {
+        for (var x = 0; x < Width; x++)
+        {
+            string line = "";
+            for (var y = Height - 1; y >= 0; y--)
+            {
+                // Print enum values 
+                var type = _data[x, y];
+                line += ((int)type).ToString();
+
+            }
+            GD.Print(line);
+        }
     }
 }
