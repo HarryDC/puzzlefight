@@ -69,7 +69,23 @@ public partial class BoardNode : Node2D
         SelectionSprite.Visible = false;
 
         _dropOrigin = new Vector2(0, -Height * Spacing);
-        
+
+        for (var i = 0; i < Width * Height; i++)
+        {
+            var type = StoneTypeEnum.GemBlue;
+            var sprite = new Sprite2D();
+            sprite.Texture = GD.Load<Texture2D>($"res://assets/gems/{type}.png");
+            sprite.Visible = false;
+            AddChild(sprite);
+            _removedSprites.Push(sprite);
+        }
+        RefreshBoard();
+    }
+
+    void RefreshBoard()
+    {
+        _board.RefreshBoard();
+        var mainTween = CreateTween();
         var dropTween = CreateTween();
         dropTween.SetParallel(true);
         
@@ -83,19 +99,21 @@ public partial class BoardNode : Node2D
             for (var y = 0; y < Height; y++)
             {
                 var type = _board.Data[x, y];
-                var sprite = new Sprite2D();
+                var sprite = _removedSprites.Pop();
                 sprite.Texture = GD.Load<Texture2D>($"res://assets/gems/{type}.png");
+                sprite.Visible = true;
+                sprite.Scale = new Vector2(1, 1);
                 var pos = new Vector2(x, y) * Spacing;
                 _sprites[x,y] = sprite;
-                AddChild(sprite);
-                
                 sprite.Position = _dropOrigin + pos;
-                
                 columnTween.TweenProperty(sprite, "position", pos, DropTime * Height).SetDelay(delay + 0.05 * (Height - y));
                 GD.Print("from", sprite.Position, "to", pos);
             }
             dropTween.TweenSubtween(columnTween);
         }
+        
+        mainTween.TweenSubtween(dropTween);
+        mainTween.TweenCallback(Callable.From(AfterBoardUpdate));
     }
 
     // Performs animations for swap and finalizes board when animations are done
@@ -126,11 +144,47 @@ public partial class BoardNode : Node2D
     private void EndSwap(Vector2I source, Vector2I target)
     {
         _board.Swap(source, target);
-        var (matchData,matches)  = _board.GetMatches();
-        DoRemove(matches);
+        AfterBoardUpdate();
     }
 
-    private void RefreshBoard(Array2D<bool> oldMatches)
+    private void AfterBoardUpdate()
+    {
+        var (matchData,matches)  = _board.GetMatches();
+        if (matchData.Count > 0)
+        {
+            DoRemove(matches);
+        }
+
+        if (_board.GetAllMoves().Count == 0)
+        {
+            DoRemoveAll();
+        }
+    }
+
+    private void DoRemoveAll()
+    {
+        var mainTween = CreateTween();
+        var motionTween = CreateTween();
+        motionTween.SetParallel(true);
+        for (var x = 0; x < Width; x++)
+        {
+            for (var y = 0; y < Height; y++)
+            {
+                var delay = GD.Randi() % 20 * 0.1;
+                var sprite = _sprites[x, y];
+                var spriteTween = CreateTween();
+                spriteTween.TweenProperty(sprite, "scale",  new Vector2(0, 0), DropTime).SetDelay(delay);
+                spriteTween.TweenProperty(sprite, "visible", false, 0.01);
+                motionTween.TweenSubtween(spriteTween);
+                _removedSprites.Push(sprite);
+            }
+        }
+        
+        mainTween.TweenSubtween(motionTween);
+        mainTween.TweenCallback(Callable.From(RefreshBoard));
+    }
+
+    private void RemoveMatching(Array2D<bool> oldMatches)
     {
         var matches = oldMatches.DeepCopy();
         // Updates the board with the state we are trying to match here
@@ -192,6 +246,7 @@ public partial class BoardNode : Node2D
             }
         }
         mainTween.TweenSubtween(motionTween);
+        mainTween.TweenCallback(Callable.From(() => AfterBoardUpdate()));
     }
 
     private void DoSwap(Vector2I source, Vector2I target, Callable callback)
@@ -235,7 +290,7 @@ public partial class BoardNode : Node2D
             }
         }
         mainTween.TweenSubtween(motionTween);
-        mainTween.TweenCallback(Callable.From(() => RefreshBoard(matches)));
+        mainTween.TweenCallback(Callable.From(() => RemoveMatching(matches)));
     }
 
     

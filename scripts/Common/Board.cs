@@ -5,6 +5,12 @@ using Godot;
 
 namespace PuzzleFight.Common;
 
+// TODO Bug in detection, does not detect a match 
+// *
+// *
+// *** <- The two extra pieces did not get removed
+// *
+// *
 public class Board
 {
     public int Width;
@@ -67,7 +73,6 @@ public class Board
         _data[to.X, to.Y] = stone;
         StoneTypeEnum color = SuggestNewColor(to);
         stone = color;
-
     }
     
     /// <summary>
@@ -211,6 +216,7 @@ public class Board
     private void ClearMatches()
     {
         _matches.Fill(false);
+        _matchData.Clear();
     }
 
     /// <summary>
@@ -246,18 +252,13 @@ public class Board
 
     public void RefreshBoard()
     {
-        var to = new Vector2I();
-        
         _data.ForEach(_ => StoneType.Random());
 
-        for (int x = 0; x < Width; ++x)
+        for (var x = 0; x < Width; ++x)
         {
-            to.X = x;
-            for (int y = 0; y < Height; ++y)
+            for (var y = 0; y < Height; ++y)
             {
-                to.Y = y;
-                var stone = _data[to];
-                stone = SuggestNewColor(to);
+                _data[x,y] = SuggestNewColor(new Vector2I(x,y));
             }
         }
     }
