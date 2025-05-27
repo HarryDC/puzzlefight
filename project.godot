@@ -23,6 +23,10 @@ project/assembly_name="PuzzleFight"
 
 enabled=PackedStringArray("res://addons/gdUnit4/plugin.cfg")
 
+[gdunit4]
+
+settings/test/test_discovery=true
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"

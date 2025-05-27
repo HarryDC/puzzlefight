@@ -16,6 +16,12 @@ public partial class BoardNode : Node2D
     
     [Export] float DropTime { get; set; } = 0.1f;
     [Export] float SwapTime { get; set; } = 0.25f;
+
+    [Export] Godot.Collections.Array<Node> Participants { get; set; } = new Godot.Collections.Array<Node>();
+    
+    List<IParticipant> _participants = new();
+    int _currentParticipant = 0;
+    
     
     private Vector2I? _selected;
     
@@ -23,7 +29,8 @@ public partial class BoardNode : Node2D
     private Array2D<Sprite2D> _sprites;
     private Stack<Sprite2D> _removedSprites = new();
     private Vector2 _dropOrigin;
-    
+    private bool _endTurn;
+
     public override void _Input(InputEvent inputEvent)
     {
         if (inputEvent is InputEventMouseButton mouseEvent && mouseEvent.Pressed)
@@ -80,6 +87,15 @@ public partial class BoardNode : Node2D
             _removedSprites.Push(sprite);
         }
         RefreshBoard();
+        
+        foreach (var participant in Participants)
+        {
+            if (participant is IParticipant p)
+            {
+                _participants.Add(p);
+            }
+        }
+        
     }
 
     void RefreshBoard()
@@ -153,12 +169,20 @@ public partial class BoardNode : Node2D
         if (matchData.Count > 0)
         {
             DoRemove(matches);
+            return;
         }
+
 
         if (_board.GetAllMoves().Count == 0)
         {
             DoRemoveAll();
+            return;
         }
+
+        // Neither of the above hanppened
+        // Change Participant 
+        _currentParticipant = (_currentParticipant + 1) % _participants.Count;
+        _participants[_currentParticipant].TakeTurn();
     }
 
     private void DoRemoveAll()
