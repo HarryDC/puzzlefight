@@ -18,14 +18,15 @@ public partial class BoardNode : Node2D
     [Export] float SwapTime { get; set; } = 0.25f;
 
     [Export] Godot.Collections.Array<Node> Participants { get; set; } = new Godot.Collections.Array<Node>();
-    
+    public Board Board { get; private set; }
+
     List<IParticipant> _participants = new();
     int _currentParticipant = 0;
     
     
     private Vector2I? _selected;
     
-    private Common.Board _board;
+
     private Array2D<Sprite2D> _sprites;
     private Stack<Sprite2D> _removedSprites = new();
     private Vector2 _dropOrigin;
@@ -69,7 +70,7 @@ public partial class BoardNode : Node2D
 
     public override void _Ready()
     {
-        _board = new Board(Width, Height);
+        Board = new Board(Width, Height);
         _sprites = new Array2D<Sprite2D>(Width, Height);
      
         _selected = null;
@@ -93,6 +94,7 @@ public partial class BoardNode : Node2D
             if (participant is IParticipant p)
             {
                 _participants.Add(p);
+                p.Setup(this);
             }
         }
         
@@ -100,7 +102,7 @@ public partial class BoardNode : Node2D
 
     void RefreshBoard()
     {
-        _board.RefreshBoard();
+        Board.RefreshBoard();
         var mainTween = CreateTween();
         var dropTween = CreateTween();
         dropTween.SetParallel(true);
@@ -114,7 +116,7 @@ public partial class BoardNode : Node2D
             var delay = 0.25 * x; 
             for (var y = 0; y < Height; y++)
             {
-                var type = _board.Data[x, y];
+                var type = Board.Data[x, y];
                 var sprite = _removedSprites.Pop();
                 sprite.Texture = GD.Load<Texture2D>($"res://assets/gems/{type}.png");
                 sprite.Visible = true;
@@ -133,9 +135,9 @@ public partial class BoardNode : Node2D
     }
 
     // Performs animations for swap and finalizes board when animations are done
-    private void StartSwap(Vector2I source, Vector2I target)
+    public void StartSwap(Vector2I source, Vector2I target)
     {
-        if (_board.IsValid(source, target))
+        if (Board.IsValid(source, target))
         {
             // On valid swap, call EndSwap as the next step
             GD.Print($"valid swap start {source} {target}");
@@ -159,13 +161,13 @@ public partial class BoardNode : Node2D
     
     private void EndSwap(Vector2I source, Vector2I target)
     {
-        _board.Swap(source, target);
+        Board.Swap(source, target);
         AfterBoardUpdate();
     }
 
     private void AfterBoardUpdate()
     {
-        var (matchData,matches)  = _board.GetMatches();
+        var (matchData,matches)  = Board.GetMatches();
         if (matchData.Count > 0)
         {
             DoRemove(matches);
@@ -173,7 +175,7 @@ public partial class BoardNode : Node2D
         }
 
 
-        if (_board.GetAllMoves().Count == 0)
+        if (Board.GetAllMoves().Count == 0)
         {
             DoRemoveAll();
             return;
@@ -212,7 +214,7 @@ public partial class BoardNode : Node2D
     {
         var matches = oldMatches.DeepCopy();
         // Updates the board with the state we are trying to match here
-        _board.RemoveMatching();
+        Board.RemoveMatching();
         
         var mainTween = CreateTween();
         var motionTween = CreateTween();
@@ -253,7 +255,7 @@ public partial class BoardNode : Node2D
             }
             for (int j = dropHeight-1; j >= 0; --j)
             {
-                var newColor = _board.Data[x, j];
+                var newColor = Board.Data[x, j];
                 var newSprite = _removedSprites.Pop();
                 newSprite.Texture = GD.Load<Texture2D>($"res://assets/gems/{newColor}.png");
                 _sprites[x, j] = newSprite;

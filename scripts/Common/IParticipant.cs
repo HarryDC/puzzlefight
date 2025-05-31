@@ -1,6 +1,9 @@
+using PuzzleFight.Common;
+
 namespace PuzzleFight.Nodes;
 
 public interface IParticipant
 {
-    public abstract void TakeTurn();
+    public void Setup(BoardNode board);
+    public void TakeTurn();
 }
