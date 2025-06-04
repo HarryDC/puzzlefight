@@ -6,7 +6,8 @@ namespace PuzzleFight.Nodes;
 
 public partial class HumanPlayerNode : Node, IParticipant
 {
-    [Export] private Panel _scorePanel;
+    // TODO move piece selection for move into here
+    [Export] public Panel ScorePanel;
     
     BoardNode _boardNode;
     
@@ -22,7 +23,7 @@ public partial class HumanPlayerNode : Node, IParticipant
 
     public void DidMatch(List<MatchData> matches)
     {
-        if (_scorePanel is ScorePanel sp)
+        if (ScorePanel is ScorePanel sp)
         {
             sp.UpdateScores(matches);
         }

@@ -7,21 +7,22 @@ namespace PuzzleFight.Nodes;
 
 public partial class BoardNode : Node2D
 {
-    [Export] public int Width { get; set; } = 5;
-    [Export] public int Height { get; set; } = 5;
+    [Export] public int Width = 5;
+    [Export] public int Height = 5;
     
-    [Export] public float Spacing { get; set; } = 120f;
+    [Export] public float Spacing = 120f;
+
+    [Export] public Sprite2D SelectionSprite1;
+    [Export] public Sprite2D SelectionSprite2;
     
-    [Export] Sprite2D SelectionSprite { get; set; }
-    
-    [Export] float DropTime { get; set; } = 0.1f;
-    [Export] float SwapTime { get; set; } = 0.25f;
+    [Export] public float DropTime  = 0.1f;
+    [Export] public float SwapTime  = 0.25f;
 
     [Export] Godot.Collections.Array<Node> Participants { get; set; } = new Godot.Collections.Array<Node>();
     public Board Board { get; private set; }
 
     List<IParticipant> _participants = new();
-    int _currentParticipant = 0;
+    int _currentParticipant;
     
     private IParticipant CurrentParticipant => _participants[_currentParticipant];
 
@@ -40,7 +41,7 @@ public partial class BoardNode : Node2D
             if (mouseEvent.ButtonIndex == MouseButton.Right)
             {
                 _selected = null;
-                SelectionSprite.Visible = false;
+                SelectionSprite1.Visible = false;
                 return;
             }
 
@@ -57,14 +58,15 @@ public partial class BoardNode : Node2D
             if (_selected == null)
             {
                 _selected = new Vector2I(x, y);
-                SelectionSprite.Position = new Vector2(x, y) * Spacing;
-                SelectionSprite.Visible = true;
+                SelectionSprite1.Position = new Vector2(x, y) * Spacing;
+                SelectionSprite1.Visible = true;
             }
             else
             { 
+                SelectionSprite2.Position = new Vector2(x, y) * Spacing;
+                SelectionSprite2.Visible = true;
                 StartSwap(_selected.Value, new Vector2I(x, y));
                 _selected = null;
-                SelectionSprite.Visible = false;
             }            
         }
     }
@@ -72,11 +74,12 @@ public partial class BoardNode : Node2D
     public override void _Ready()
     {
         Board = new Board(Width, Height);
-        _sprites = new Array2D<Sprite2D>(Width, Height);
-     
-        _selected = null;
-        SelectionSprite.Visible = false;
+        
+        SelectionSprite1.Visible = false;
+        SelectionSprite2.Visible = false;
 
+        _sprites = new Array2D<Sprite2D>(Width, Height);
+        _selected = null;
         _dropOrigin = new Vector2(0, -Height * Spacing);
 
         for (var i = 0; i < Width * Height; i++)
@@ -88,6 +91,7 @@ public partial class BoardNode : Node2D
             AddChild(sprite);
             _removedSprites.Push(sprite);
         }
+        
         RefreshBoard();
         
         foreach (var participant in Participants)
@@ -98,7 +102,6 @@ public partial class BoardNode : Node2D
                 p.Setup(this);
             }
         }
-        
     }
 
     void RefreshBoard()
@@ -250,7 +253,7 @@ public partial class BoardNode : Node2D
                     var spriteTween = CreateTween();
                     spriteTween.SetTrans(Tween.TransitionType.Cubic);
                     spriteTween.TweenProperty(sprite, "position", new Vector2(x, y + dropHeight) * Spacing, DropTime * dropHeight)
-                        .SetDelay(0.1 * delay);;
+                        .SetDelay(0.1 * delay);
                     motionTween.TweenSubtween(spriteTween);
                     _sprites[x, y + dropHeight] = sprite;
                     ++delay;
@@ -269,7 +272,7 @@ public partial class BoardNode : Node2D
                 var newPos = IndexToPosition(x,j);
                 var spriteTween = CreateTween();
                 spriteTween.SetTrans(Tween.TransitionType.Cubic);
-                spriteTween.TweenProperty(newSprite, "position", newPos, DropTime * dropHeight).SetDelay(0.1 * delay);;
+                spriteTween.TweenProperty(newSprite, "position", newPos, DropTime * dropHeight).SetDelay(0.1 * delay);
                 motionTween.TweenSubtween(spriteTween);
                 ++delay;
             }
@@ -284,13 +287,15 @@ public partial class BoardNode : Node2D
         motion.SetParallel(true);
         motion.SetTrans(Tween.TransitionType.Cubic);
 
+        motion.TweenProperty(SelectionSprite1, "visible", false, 0.01);
+        motion.TweenProperty(SelectionSprite2, "visible", false, 0.01);
         var sprite1 = _sprites[source];
         var sprite2 = _sprites[target];
         motion.TweenProperty(sprite1, "position", IndexToPosition(target), SwapTime);
         motion.TweenProperty(sprite2, "position", IndexToPosition(source), SwapTime);
         
         var mainTween = CreateTween();
-        mainTween.TweenSubtween(motion);
+        mainTween.TweenSubtween(motion).SetDelay(.5);
         mainTween.TweenCallback(callback);   
         _sprites.Swap(source, target);
     }
@@ -332,5 +337,15 @@ public partial class BoardNode : Node2D
     {
         return new Vector2(x, y) * Spacing;
     }
-    
+
+    public void StartAiMove(Vector2I one, Vector2I two)
+    {
+        SelectionSprite1.Position = IndexToPosition(one);
+        SelectionSprite2.Position = IndexToPosition(two);
+        
+        var tween = CreateTween();
+        tween.TweenProperty(SelectionSprite1,"visible", true, 0.01);
+        tween.TweenProperty(SelectionSprite2,"visible", true, 0.01).SetDelay(0.25);
+        tween.TweenCallback(Callable.From(() => StartSwap(one, two)));
+    }
 }
