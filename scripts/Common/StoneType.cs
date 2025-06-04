@@ -20,7 +20,7 @@ namespace PuzzleFight.Common
         {
             if (Values.Length == 1) return (StoneTypeEnum)Values.GetValue(0);
             var stone = (StoneTypeEnum)Values.GetValue(GD.Randi() % (Values.Length - 1));
-            GD.Print($"New Stone {stone}");
+            //GD.Print($"New Stone {stone}");
             return stone;
         } 
     }

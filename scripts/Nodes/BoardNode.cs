@@ -23,7 +23,8 @@ public partial class BoardNode : Node2D
     List<IParticipant> _participants = new();
     int _currentParticipant = 0;
     
-    
+    private IParticipant CurrentParticipant => _participants[_currentParticipant];
+
     private Vector2I? _selected;
     
 
@@ -125,7 +126,7 @@ public partial class BoardNode : Node2D
                 _sprites[x,y] = sprite;
                 sprite.Position = _dropOrigin + pos;
                 columnTween.TweenProperty(sprite, "position", pos, DropTime * Height).SetDelay(delay + 0.05 * (Height - y));
-                GD.Print("from", sprite.Position, "to", pos);
+                //GD.Print("from", sprite.Position, "to", pos);
             }
             dropTween.TweenSubtween(columnTween);
         }
@@ -168,8 +169,10 @@ public partial class BoardNode : Node2D
     private void AfterBoardUpdate()
     {
         var (matchData,matches)  = Board.GetMatches();
+        
         if (matchData.Count > 0)
         {
+            CurrentParticipant.DidMatch(matchData);
             DoRemove(matches);
             return;
         }

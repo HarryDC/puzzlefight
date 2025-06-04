@@ -10,4 +10,7 @@
         <PackageReference Include="gdUnit4.api" Version="4.3.*" />
         <PackageReference Include="gdUnit4.test.adapter" Version="2.*" />
    </ItemGroup>
+  <ItemGroup>
+    <Folder Include="scripts\Actions\" />
+  </ItemGroup>
 </Project>

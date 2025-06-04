@@ -1,0 +1,41 @@
+[gd_scene load_steps=6 format=3 uid="uid://dvxfom0n1iw03"]
+
+[ext_resource type="Script" uid="uid://dvb6loya25b6w" path="res://scripts/Nodes/BoardNode.cs" id="1_lquwl"]
+[ext_resource type="Texture2D" uid="uid://bkcc760iv72f0" path="res://assets/gems/GemBlue.png" id="2_7mycd"]
+[ext_resource type="Script" uid="uid://wosupgpvivib" path="res://scripts/Nodes/AiPlayerNode.cs" id="3_272bh"]
+[ext_resource type="Script" uid="uid://di2j8xropyys4" path="res://scripts/Nodes/HumanPlayerNode.cs" id="4_5vw27"]
+[ext_resource type="PackedScene" uid="uid://d3ppta0otjomc" path="res://score_panel.tscn" id="5_kek77"]
+
+[node name="BoardScene" type="Node"]
+
+[node name="Board" type="Node2D" parent="." node_paths=PackedStringArray("SelectionSprite", "Participants")]
+position = Vector2(704, 332)
+script = ExtResource("1_lquwl")
+SelectionSprite = NodePath("GemBlue")
+Participants = [NodePath("../Oppoenent"), NodePath("../Player")]
+
+[node name="GemBlue" type="Sprite2D" parent="Board"]
+visible = false
+z_index = 1
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_7mycd")
+
+[node name="Oppoenent" type="Node" parent="." node_paths=PackedStringArray("_scorePanel")]
+script = ExtResource("3_272bh")
+_scorePanel = NodePath("../OpponentPanel")
+
+[node name="OpponentPanel" parent="." instance=ExtResource("5_kek77")]
+offset_left = 1453.0
+offset_top = 17.0
+offset_right = 1911.0
+offset_bottom = 800.0
+
+[node name="Player" type="Node" parent="." node_paths=PackedStringArray("_scorePanel")]
+script = ExtResource("4_5vw27")
+_scorePanel = NodePath("../PlayerPanel")
+
+[node name="PlayerPanel" parent="." instance=ExtResource("5_kek77")]
+offset_left = -2.0
+offset_top = 2.0
+offset_right = 456.0
+offset_bottom = 785.0

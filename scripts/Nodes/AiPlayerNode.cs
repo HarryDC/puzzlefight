@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 using PuzzleFight.Common;
 
@@ -6,6 +7,7 @@ namespace PuzzleFight.Nodes;
 public partial class AiPlayerNode : Node, IParticipant
 {
     private BoardNode _boardNode;
+    [Export] ScorePanel _scorePanel;
 
     public void Setup(BoardNode boardNode)
     {
@@ -20,5 +22,13 @@ public partial class AiPlayerNode : Node, IParticipant
         var count = moves.Count/2;
         var chosen = (int)(GD.Randi() % count);
         _boardNode.StartSwap(moves[chosen*2], moves[chosen*2+1]);
+    }
+    
+    public void DidMatch(List<MatchData> matches)
+    {
+        if (_scorePanel is ScorePanel p)
+        {
+            p.UpdateScores(matches);
+        }
     }
 }
