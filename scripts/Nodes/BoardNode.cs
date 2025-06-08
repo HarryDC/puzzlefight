@@ -55,6 +55,7 @@ public partial class BoardNode : Node2D
             }
             var x = (int)Math.Floor(local.X / Spacing);
             var y = (int)Math.Floor(local.Y / Spacing);
+            
             if (_selected == null)
             {
                 _selected = new Vector2I(x, y);
@@ -62,13 +63,19 @@ public partial class BoardNode : Node2D
                 SelectionSprite1.Visible = true;
             }
             else
-            { 
-                SelectionSprite2.Position = new Vector2(x, y) * Spacing;
-                SelectionSprite2.Visible = true;
-                StartSwap(_selected.Value, new Vector2I(x, y));
-                _selected = null;
-            }            
-        }
+            {
+                var second = new Vector2I(x, y);
+                var diff = _selected.Value - second;
+                var sum = Math.Abs(diff.X) + Math.Abs(diff.Y);
+                if (sum == 1)
+                {
+                    SelectionSprite2.Position = new Vector2(x, y) * Spacing;
+                    SelectionSprite2.Visible = true;
+                    StartSwap(_selected.Value, new Vector2I(x, y));
+                    _selected = null;
+                }
+            }
+        }            
     }
 
     public override void _Ready()

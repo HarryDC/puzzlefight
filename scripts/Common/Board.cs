@@ -47,6 +47,14 @@ public class Board
             }
         }
     }
+
+    public Board(Array2D<StoneTypeEnum> data)
+    {
+        _data = data;
+        Width = _data.Width;
+        Height = _data.Height;
+        _matches = new Array2D<bool>(Width, Height);
+    }
     
     public bool Swap(Vector2I a, Vector2I b)
     {
@@ -173,9 +181,9 @@ public class Board
             for (int x = 0; x < Width; ++x)
             {
                 const int maxCount = 5;
-                int matched = 0;
+                int matched = 1;
                 // Check for matches along X
-                for (int i = 0; i <= maxCount && x + i < Width; ++i)
+                for (int i = 1; i <= maxCount && x + i < Width; ++i)
                 {
                     if (_data[x, y] == _data[x + i, y] && 
                         (!_matches[x, y] || !_matches[x+i, y])) matched++;
@@ -192,8 +200,8 @@ public class Board
                 }
 
                 // Check for matches along Y
-                matched = 0;
-                for (int i = 0; i <= maxCount && y + i < Height; ++i)
+                matched = 1;
+                for (int i = 1; i <= maxCount && y + i < Height; ++i)
                 {
                     if (_data[x, y] == _data[x , y + i] &&
                         (!_matches[x, y] || !_matches[x, y + i])) matched++;
@@ -308,17 +316,16 @@ public class Board
 
     public void Dump()
     {
-        for (var x = 0; x < Width; x++)
+        for (var y = 0; y < Height; y++)
         {
             string line = "";
-            for (var y = Height - 1; y >= 0; y--)
+            for (var x = 0; x < Width; x++)
             {
                 // Print enum values 
                 var type = _data[x, y];
                 line += ((int)type).ToString();
-
             }
-            GD.Print(line);
+            System.Console.WriteLine(line);
         }
     }
 }
