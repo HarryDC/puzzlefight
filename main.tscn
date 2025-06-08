@@ -13,7 +13,7 @@ position = Vector2(704, 332)
 script = ExtResource("1_lquwl")
 SelectionSprite1 = NodePath("selectionOne")
 SelectionSprite2 = NodePath("selectionTwo")
-Participants = [NodePath("../Player"), NodePath("../Opponent")]
+Participants = [NodePath("../Player")]
 
 [node name="selectionOne" type="Sprite2D" parent="Board"]
 z_index = -1

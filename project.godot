@@ -32,6 +32,7 @@ enabled=PackedStringArray("res://addons/gdUnit4/plugin.cfg")
 [gdunit4]
 
 settings/test/test_discovery=true
+settings/test/test_lookup_folder="Tests"
 
 [rendering]
 

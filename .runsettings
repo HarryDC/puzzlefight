@@ -6,6 +6,9 @@
         <TargetFrameworks>net7.0;net8.0</TargetFrameworks>
         <TestSessionTimeout>180000</TestSessionTimeout>
         <TreatNoTestsAsError>true</TreatNoTestsAsError>
+        <EnvironmentVariables>
+            <GODOT_BIN>/Applications/Godot_mono_4.4.app/Contents/MacOS/Godot</GODOT_BIN>
+        </EnvironmentVariables>
     </RunConfiguration>
 
     <LoggerRunSettings>
@@ -29,9 +32,9 @@
     </LoggerRunSettings>
 
     <GdUnit4>
-        <!-- Additional Godot runtime parameters-->
+        <!-- Additonal Godot runtime parameters-->
         <Parameters></Parameters>
-        <!-- Controls the Display name attribute of the TestCase. Allowed values are SimpleName and FullyQualifiedName.
+        <!-- Controlls the Display name attribute of the TestCase. Allowed values are SimpleName and FullyQualifiedName.
              This likely determines how the test names are displayed in the test results.-->
         <DisplayName>FullyQualifiedName</DisplayName>
     </GdUnit4>
