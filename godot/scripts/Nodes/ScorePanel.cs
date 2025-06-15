@@ -2,14 +2,15 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using PuzzleFight.Common;
+using PuzzleFight.scripts.Resources;
 
 public partial class ScorePanel : Panel
 {
     [Export] public Label RedLabel;
     [Export] public Label GreenLabel;
     [Export] public Label BlueLabel;
-    [Export] public Label PurpleLabel;
-    [Export] public Label YellowLabel;
+    [Export] public Label HpLabel;
+    [Export] public Label AcLabel;
 
     private class ScoreData
     {
@@ -41,8 +42,6 @@ public partial class ScorePanel : Panel
         _scores.Add(StoneTypeEnum.GemRed, new ScoreData(RedLabel));
         _scores.Add(StoneTypeEnum.GemBlue, new ScoreData(BlueLabel));
         _scores.Add(StoneTypeEnum.GemGreen, new ScoreData(GreenLabel));
-        _scores.Add(StoneTypeEnum.GemPurple, new ScoreData(PurpleLabel));
-        _scores.Add(StoneTypeEnum.GemYellow, new ScoreData(YellowLabel));
         GD.Print("ScorePanel Initialized");
     }
 
@@ -50,8 +49,21 @@ public partial class ScorePanel : Panel
     {
         foreach (var match in matches)
         {
-            _scores[match.Type].Score += match.Count;
+            if (_scores.ContainsKey(match.Type))
+            {
+                _scores[match.Type].Score += match.Count;
+            }
+            else
+            {
+                GD.PrintErr($"ScorePanel Can't add {match.Type} to score list");
+            }
         }
+    }
+
+    public void UpdateCharacter(Character character)
+    {
+        HpLabel.Text = $"{character.HitPoints}";
+        AcLabel.Text = $"{character.Armor}";
     }
 
     public void Clear()

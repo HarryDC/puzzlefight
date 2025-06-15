@@ -1,10 +1,12 @@
-[gd_scene load_steps=6 format=3 uid="uid://dvxfom0n1iw03"]
+[gd_scene load_steps=8 format=3 uid="uid://dvxfom0n1iw03"]
 
 [ext_resource type="Script" uid="uid://dvb6loya25b6w" path="res://scripts/Nodes/BoardNode.cs" id="1_lquwl"]
 [ext_resource type="Texture2D" uid="uid://btia87n605pt6" path="res://assets/selection.png" id="2_lquwl"]
 [ext_resource type="Script" uid="uid://wosupgpvivib" path="res://scripts/Nodes/AiPlayerNode.cs" id="3_272bh"]
 [ext_resource type="Script" uid="uid://di2j8xropyys4" path="res://scripts/Nodes/HumanPlayerNode.cs" id="4_5vw27"]
+[ext_resource type="Resource" uid="uid://cx3cy1efr0o62" path="res://resources/opponent.tres" id="4_272bh"]
 [ext_resource type="PackedScene" uid="uid://d3ppta0otjomc" path="res://score_panel.tscn" id="5_kek77"]
+[ext_resource type="Resource" uid="uid://dnndpd7os2fr0" path="res://resources/player.tres" id="7_5vw27"]
 
 [node name="BoardScene" type="Node"]
 
@@ -13,7 +15,7 @@ position = Vector2(704, 332)
 script = ExtResource("1_lquwl")
 SelectionSprite1 = NodePath("selectionOne")
 SelectionSprite2 = NodePath("selectionTwo")
-Participants = [NodePath("../Player")]
+Participants = [NodePath("../Player"), NodePath("../Opponent")]
 
 [node name="selectionOne" type="Sprite2D" parent="Board"]
 z_index = -1
@@ -23,9 +25,13 @@ texture = ExtResource("2_lquwl")
 z_index = -1
 texture = ExtResource("2_lquwl")
 
-[node name="Opponent" type="Node" parent="." node_paths=PackedStringArray("_scorePanel")]
+[node name="Opponent" type="Node" parent="." node_paths=PackedStringArray("Opponent", "_selectionSprite1", "_selectionSprite2", "ScorePanel")]
 script = ExtResource("3_272bh")
-_scorePanel = NodePath("../OpponentPanel")
+Opponent = NodePath("../Player")
+_selectionSprite1 = NodePath("../Board/selectionOne")
+_selectionSprite2 = NodePath("../Board/selectionTwo")
+Character = ExtResource("4_272bh")
+ScorePanel = NodePath("../OpponentPanel")
 
 [node name="OpponentPanel" parent="." instance=ExtResource("5_kek77")]
 offset_left = 1453.0
@@ -33,8 +39,10 @@ offset_top = 17.0
 offset_right = 1911.0
 offset_bottom = 800.0
 
-[node name="Player" type="Node" parent="." node_paths=PackedStringArray("ScorePanel")]
+[node name="Player" type="Node" parent="." node_paths=PackedStringArray("Opponent", "ScorePanel")]
 script = ExtResource("4_5vw27")
+Opponent = NodePath("../Opponent")
+Character = ExtResource("7_5vw27")
 ScorePanel = NodePath("../PlayerPanel")
 
 [node name="PlayerPanel" parent="." instance=ExtResource("5_kek77")]

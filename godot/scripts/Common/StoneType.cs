@@ -9,8 +9,9 @@ namespace PuzzleFight.Common
         GemBlue,
         GemGreen,
         GemRed,
-        GemPurple,
-        GemYellow
+        /*GemPurple,
+        GemYellow,*/
+        Sword,
     }
 
     public static class StoneType

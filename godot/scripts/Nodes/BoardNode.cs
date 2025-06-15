@@ -21,10 +21,10 @@ public partial class BoardNode : Node2D
     [Export] Godot.Collections.Array<Node> Participants { get; set; } = new Godot.Collections.Array<Node>();
     public Board Board { get; private set; }
 
-    List<IParticipant> _participants = new();
+    List<Participant> _participants = new();
     int _currentParticipant;
     
-    private IParticipant CurrentParticipant => _participants[_currentParticipant];
+    private Participant CurrentParticipant => _participants[_currentParticipant];
 
     private Vector2I? _selected;
     
@@ -103,7 +103,7 @@ public partial class BoardNode : Node2D
         
         foreach (var participant in Participants)
         {
-            if (participant is IParticipant p)
+            if (participant is Participant p)
             {
                 _participants.Add(p);
                 p.Setup(this);

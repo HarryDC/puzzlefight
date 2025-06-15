@@ -5,7 +5,7 @@
 [sub_resource type="LabelSettings" id="LabelSettings_0hol4"]
 font_size = 64
 
-[node name="ScorePanel" type="Panel" node_paths=PackedStringArray("RedLabel", "GreenLabel", "BlueLabel", "PurpleLabel", "YellowLabel")]
+[node name="ScorePanel" type="Panel" node_paths=PackedStringArray("RedLabel", "GreenLabel", "BlueLabel", "HpLabel", "AcLabel")]
 offset_left = 7.0
 offset_top = 25.0
 offset_right = 465.0
@@ -14,8 +14,8 @@ script = ExtResource("1_g4u8w")
 RedLabel = NodePath("ScoreRed")
 GreenLabel = NodePath("ScoreGreen")
 BlueLabel = NodePath("ScoreBlue")
-PurpleLabel = NodePath("ScorePurple")
-YellowLabel = NodePath("ScoreYellow")
+HpLabel = NodePath("ScoreHP")
+AcLabel = NodePath("ScoreAC")
 
 [node name="LabelRed" type="Label" parent="."]
 layout_mode = 0
@@ -49,15 +49,15 @@ offset_bottom = 208.0
 text = "0"
 label_settings = SubResource("LabelSettings_0hol4")
 
-[node name="LabelPurple" type="Label" parent="."]
+[node name="LabelBlue" type="Label" parent="."]
 layout_mode = 0
 offset_top = 240.0
 offset_right = 41.0
 offset_bottom = 328.0
-text = "Purple:"
+text = "Blue:"
 label_settings = SubResource("LabelSettings_0hol4")
 
-[node name="ScorePurple" type="Label" parent="."]
+[node name="ScoreBlue" type="Label" parent="."]
 layout_mode = 0
 offset_left = 240.0
 offset_top = 240.0
@@ -66,7 +66,7 @@ offset_bottom = 328.0
 text = "0"
 label_settings = SubResource("LabelSettings_0hol4")
 
-[node name="ScoreYellow" type="Label" parent="."]
+[node name="ScoreHP" type="Label" parent="."]
 layout_mode = 0
 offset_left = 240.0
 offset_top = 360.0
@@ -75,23 +75,23 @@ offset_bottom = 448.0
 text = "0"
 label_settings = SubResource("LabelSettings_0hol4")
 
-[node name="LabelYellow" type="Label" parent="."]
+[node name="LabelHP" type="Label" parent="."]
 layout_mode = 0
 offset_top = 360.0
 offset_right = 41.0
 offset_bottom = 448.0
-text = "Yellow:"
+text = "HP:"
 label_settings = SubResource("LabelSettings_0hol4")
 
-[node name="LabelBlue" type="Label" parent="."]
+[node name="LabelAC" type="Label" parent="."]
 layout_mode = 0
 offset_top = 480.0
 offset_right = 41.0
 offset_bottom = 568.0
-text = "Blue:"
+text = "AC:"
 label_settings = SubResource("LabelSettings_0hol4")
 
-[node name="ScoreBlue" type="Label" parent="."]
+[node name="ScoreAC" type="Label" parent="."]
 layout_mode = 0
 offset_left = 240.0
 offset_top = 480.0

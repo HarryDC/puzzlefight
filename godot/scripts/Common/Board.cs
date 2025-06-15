@@ -5,12 +5,6 @@ using Godot;
 
 namespace PuzzleFight.Common;
 
-// TODO Bug in detection, does not detect a match 
-// *
-// *
-// *** <- The two extra pieces did not get removed
-// *
-// *
 public class Board
 {
     public int Width;

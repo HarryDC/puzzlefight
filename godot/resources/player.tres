@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Character" load_steps=2 format=3 uid="uid://dnndpd7os2fr0"]
+
+[ext_resource type="Script" uid="uid://bpvabkd6ra6x0" path="res://scripts/Resources/Character.cs" id="1_rjq7u"]
+
+[resource]
+script = ExtResource("1_rjq7u")
+HitPoints = 100
+MaxHitPoints = 100
+Armor = 5
+Attack = 8
+metadata/_custom_type_script = "uid://bpvabkd6ra6x0"

@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Godot Game Design Document.md",
+                "file": "PuzzleFight Design Document.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Godot Game Design Document"
+              "title": "PuzzleFight Design Document"
             }
           },
           {
@@ -177,9 +177,9 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "693d552eb343760d",
+  "active": "4f6fe055fdc01892",
   "lastOpenFiles": [
-    "Godot Game Design Document.md",
+    "PuzzleFight Design Document.md",
     "Introduction.md"
   ]
 }

@@ -1,26 +1,25 @@
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 using PuzzleFight.Common;
 
 namespace PuzzleFight.Nodes;
 
-public partial class AiPlayerNode : Node, IParticipant
+public partial class AiPlayerNode : Participant
 {
     private BoardNode _boardNode;
-    [Export] ScorePanel _scorePanel;
-
+    
+    [Export] public Participant Opponent;
+    
     [Export] private Node2D _selectionSprite1;
     [Export] private Node2D _selectionSprite2;
-    
-    // TODO need to animate the move selection it's hard to tell what's going on
-
-    public void Setup(BoardNode boardNode)
+   
+    public override void Setup(BoardNode boardNode)
     {
         _boardNode = boardNode;
-        
     }
 
-    public void TakeTurn()
+    public override void TakeTurn()
     {
         var moves = _boardNode.Board.GetAllMoves();
         // Should not be empty
@@ -31,11 +30,19 @@ public partial class AiPlayerNode : Node, IParticipant
 
     }
     
-    public void DidMatch(List<MatchData> matches)
+    public override void DidMatch(List<MatchData> matches)
     {
-        if (_scorePanel is ScorePanel p)
+        var attackCount =  (from match in matches 
+                where match.Type == StoneTypeEnum.Sword select match).Sum(m => m.Count);
+        
+        var attack = (3.0f / matches.Count) * Character.Attack;
+        
+        
+        if (attackCount > 0)
         {
-            p.UpdateScores(matches);
+            Opponent.Attack(this, (int)attack);
         }
+        
+        ScorePanel.UpdateScores(matches);
     }
 }
