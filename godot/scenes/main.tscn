@@ -1,51 +1,51 @@
 [gd_scene load_steps=8 format=3 uid="uid://dvxfom0n1iw03"]
 
-[ext_resource type="Script" uid="uid://dvb6loya25b6w" path="res://scripts/Nodes/BoardNode.cs" id="1_lquwl"]
-[ext_resource type="Texture2D" uid="uid://btia87n605pt6" path="res://assets/selection.png" id="2_lquwl"]
-[ext_resource type="Script" uid="uid://wosupgpvivib" path="res://scripts/Nodes/AiPlayerNode.cs" id="3_272bh"]
-[ext_resource type="Script" uid="uid://di2j8xropyys4" path="res://scripts/Nodes/HumanPlayerNode.cs" id="4_5vw27"]
-[ext_resource type="Resource" uid="uid://cx3cy1efr0o62" path="res://resources/opponent.tres" id="4_272bh"]
-[ext_resource type="PackedScene" uid="uid://d3ppta0otjomc" path="res://score_panel.tscn" id="5_kek77"]
-[ext_resource type="Resource" uid="uid://dnndpd7os2fr0" path="res://resources/player.tres" id="7_5vw27"]
+[ext_resource type="Script" uid="uid://dvb6loya25b6w" path="res://scripts/Nodes/BoardNode.cs" id="1_o6xl0"]
+[ext_resource type="Texture2D" uid="uid://btia87n605pt6" path="res://assets/selection.png" id="2_tipki"]
+[ext_resource type="Script" uid="uid://wosupgpvivib" path="res://scripts/Nodes/AiPlayerNode.cs" id="3_85g3d"]
+[ext_resource type="Resource" uid="uid://cx3cy1efr0o62" path="res://resources/opponent.tres" id="4_choun"]
+[ext_resource type="PackedScene" uid="uid://d3ppta0otjomc" path="res://scenes/score_panel.tscn" id="5_ya4ey"]
+[ext_resource type="Script" uid="uid://di2j8xropyys4" path="res://scripts/Nodes/HumanPlayerNode.cs" id="6_eb6dy"]
+[ext_resource type="Resource" uid="uid://dnndpd7os2fr0" path="res://resources/player.tres" id="7_trceg"]
 
 [node name="BoardScene" type="Node"]
 
 [node name="Board" type="Node2D" parent="." node_paths=PackedStringArray("SelectionSprite1", "SelectionSprite2", "Participants")]
 position = Vector2(704, 332)
-script = ExtResource("1_lquwl")
+script = ExtResource("1_o6xl0")
 SelectionSprite1 = NodePath("selectionOne")
 SelectionSprite2 = NodePath("selectionTwo")
 Participants = [NodePath("../Player"), NodePath("../Opponent")]
 
 [node name="selectionOne" type="Sprite2D" parent="Board"]
 z_index = -1
-texture = ExtResource("2_lquwl")
+texture = ExtResource("2_tipki")
 
 [node name="selectionTwo" type="Sprite2D" parent="Board"]
 z_index = -1
-texture = ExtResource("2_lquwl")
+texture = ExtResource("2_tipki")
 
 [node name="Opponent" type="Node" parent="." node_paths=PackedStringArray("Opponent", "_selectionSprite1", "_selectionSprite2", "ScorePanel")]
-script = ExtResource("3_272bh")
+script = ExtResource("3_85g3d")
 Opponent = NodePath("../Player")
 _selectionSprite1 = NodePath("../Board/selectionOne")
 _selectionSprite2 = NodePath("../Board/selectionTwo")
-Character = ExtResource("4_272bh")
+Character = ExtResource("4_choun")
 ScorePanel = NodePath("../OpponentPanel")
 
-[node name="OpponentPanel" parent="." instance=ExtResource("5_kek77")]
+[node name="OpponentPanel" parent="." instance=ExtResource("5_ya4ey")]
 offset_left = 1453.0
 offset_top = 17.0
 offset_right = 1911.0
 offset_bottom = 800.0
 
 [node name="Player" type="Node" parent="." node_paths=PackedStringArray("Opponent", "ScorePanel")]
-script = ExtResource("4_5vw27")
+script = ExtResource("6_eb6dy")
 Opponent = NodePath("../Opponent")
-Character = ExtResource("7_5vw27")
+Character = ExtResource("7_trceg")
 ScorePanel = NodePath("../PlayerPanel")
 
-[node name="PlayerPanel" parent="." instance=ExtResource("5_kek77")]
+[node name="PlayerPanel" parent="." instance=ExtResource("5_ya4ey")]
 offset_left = -2.0
 offset_top = 2.0
 offset_right = 456.0

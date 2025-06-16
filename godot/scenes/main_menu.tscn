@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=3 uid="uid://7yts2m4y6uyy"]
+
+[ext_resource type="Texture2D" uid="uid://cg44opvx6kr0j" path="res://assets/gui/button_large_orange.png" id="1_l6cm7"]
+[ext_resource type="Script" uid="uid://baam2umyfb5w7" path="res://scripts/Nodes/MainMenu.cs" id="1_wu84c"]
+[ext_resource type="Texture2D" uid="uid://bd2wkv5qttiix" path="res://assets/gui/ButtonText_Large_Blank_Round.png" id="2_bqqt6"]
+[ext_resource type="FontFile" uid="uid://ddhu1od53rwmf" path="res://assets/Fredoka-SemiBold.ttf" id="2_ekxnf"]
+
+[node name="MainMenu" type="Node2D"]
+script = ExtResource("1_wu84c")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+offset_right = 1920.0
+offset_bottom = 1080.0
+
+[node name="TextureButton" type="TextureButton" parent="CenterContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+texture_normal = ExtResource("1_l6cm7")
+texture_pressed = ExtResource("2_bqqt6")
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="CenterContainer/TextureButton"]
+layout_mode = 0
+offset_left = 325.0
+offset_top = 4.0
+offset_right = 838.0
+offset_bottom = 315.0
+theme_override_fonts/font = ExtResource("2_ekxnf")
+theme_override_font_sizes/font_size = 256
+text = "Play"
+
+[connection signal="pressed" from="CenterContainer/TextureButton" to="." method="OnPlayButtonPressed"]

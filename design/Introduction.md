@@ -13,6 +13,7 @@
 ## Development Software
 The game is to be implemented using Godot and C#. 
 
-[Genre 3](https://docs.google.com/document/d/1Vl7BMvzUOhbunJrI_X1gUc6x-LAp3aaBiPwHUf27B70/edit#heading=h.e2dtzid2e6zz)
+## Genre
+The game is a single player mashup match3 puzzle game with RPG elements
 
 [Target Audience 3](https://docs.google.com/document/d/1Vl7BMvzUOhbunJrI_X1gUc6x-LAp3aaBiPwHUf27B70/edit#heading=h.jbmf5pbr5wnw)**
