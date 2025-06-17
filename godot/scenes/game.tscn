@@ -1,0 +1,57 @@
+[gd_scene load_steps=9 format=3 uid="uid://dvxfom0n1iw03"]
+
+[ext_resource type="Script" uid="uid://bjxh28i17iov1" path="res://scripts/Nodes/Game.cs" id="1_gee14"]
+[ext_resource type="Script" uid="uid://dvb6loya25b6w" path="res://scripts/Nodes/BoardNode.cs" id="1_u5sy4"]
+[ext_resource type="Texture2D" uid="uid://btia87n605pt6" path="res://assets/selection.png" id="2_gee14"]
+[ext_resource type="Script" uid="uid://wosupgpvivib" path="res://scripts/Nodes/AiPlayerNode.cs" id="3_0tnpc"]
+[ext_resource type="Resource" uid="uid://cx3cy1efr0o62" path="res://resources/opponent.tres" id="4_vtaks"]
+[ext_resource type="PackedScene" uid="uid://d3ppta0otjomc" path="res://scenes/score_panel.tscn" id="5_kvpfn"]
+[ext_resource type="Script" uid="uid://di2j8xropyys4" path="res://scripts/Nodes/HumanPlayerNode.cs" id="6_dinhu"]
+[ext_resource type="Resource" uid="uid://dnndpd7os2fr0" path="res://resources/player.tres" id="7_kvuet"]
+
+[node name="Game" type="Node"]
+script = ExtResource("1_gee14")
+
+[node name="Board" type="Node2D" parent="." node_paths=PackedStringArray("SelectionSprite1", "SelectionSprite2", "Participants")]
+position = Vector2(704, 332)
+script = ExtResource("1_u5sy4")
+SelectionSprite1 = NodePath("SelectionOne")
+SelectionSprite2 = NodePath("SelectionTwo")
+Participants = [NodePath("../Player"), NodePath("../Opponent")]
+
+[node name="SelectionOne" type="Sprite2D" parent="Board"]
+z_index = -1
+texture = ExtResource("2_gee14")
+
+[node name="SelectionTwo" type="Sprite2D" parent="Board"]
+z_index = -1
+texture = ExtResource("2_gee14")
+
+[node name="Opponent" type="Node" parent="." node_paths=PackedStringArray("Opponent", "_selectionSprite1", "_selectionSprite2", "ScorePanel")]
+script = ExtResource("3_0tnpc")
+Opponent = NodePath("../Player")
+_selectionSprite1 = NodePath("../Board/SelectionOne")
+_selectionSprite2 = NodePath("../Board/SelectionTwo")
+Character = ExtResource("4_vtaks")
+ScorePanel = NodePath("../OpponentPanel")
+
+[node name="OpponentPanel" parent="." instance=ExtResource("5_kvpfn")]
+offset_left = 1453.0
+offset_top = 17.0
+offset_right = 1911.0
+offset_bottom = 800.0
+
+[node name="Player" type="Node" parent="." node_paths=PackedStringArray("Opponent", "ScorePanel")]
+script = ExtResource("6_dinhu")
+Opponent = NodePath("../Opponent")
+Character = ExtResource("7_kvuet")
+ScorePanel = NodePath("../PlayerPanel")
+
+[node name="PlayerPanel" parent="." instance=ExtResource("5_kvpfn")]
+offset_left = -2.0
+offset_top = 2.0
+offset_right = 456.0
+offset_bottom = 785.0
+
+[connection signal="ParticipantDeath" from="Opponent" to="." method="OnOpponentDeath"]
+[connection signal="ParticipantDeath" from="Player" to="." method="OnPlayerDeath"]

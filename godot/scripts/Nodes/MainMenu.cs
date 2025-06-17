@@ -5,6 +5,6 @@ public partial class MainMenu : Node2D
 {
     void OnPlayButtonPressed()
     {
-        GetTree().ChangeSceneToFile("res://scenes/main.tscn");
+        GetTree().ChangeSceneToFile("res://scenes/game.tscn");
     }
 }

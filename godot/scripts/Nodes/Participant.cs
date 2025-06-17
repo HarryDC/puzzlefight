@@ -10,9 +10,18 @@ public abstract partial class Participant : Node
 {
     [Export] public Character Character;
     [Export] public ScorePanel ScorePanel;
+    
+    [Signal]
+    public delegate void ParticipantDeathEventHandler();
+    
     public abstract void Setup(BoardNode board);
     public abstract void TakeTurn();
     public abstract void DidMatch(List<MatchData> matches);
+
+    public override void _Ready()
+    {
+        ScorePanel.UpdateCharacter(Character);
+    }
 
     public void Attack(Participant attacker, int damage)
     {
@@ -25,7 +34,7 @@ public abstract partial class Participant : Node
         
         if (Character.HitPoints <= 0)
         {
-            GD.Print("Character Ded");
+            EmitSignal(SignalName.ParticipantDeath);
         }
     }
 }

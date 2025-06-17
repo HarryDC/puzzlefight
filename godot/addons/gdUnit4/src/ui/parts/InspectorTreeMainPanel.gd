@@ -3,6 +3,8 @@ extends VSplitContainer
 
 ## Will be emitted when the test index counter is changed
 signal test_counters_changed(index: int, total: int, state: GdUnitInspectorTreeConstants.STATE)
+signal tree_item_selected(item: TreeItem)
+
 
 const CONTEXT_MENU_RUN_ID = 0
 const CONTEXT_MENU_DEBUG_ID = 1
@@ -61,8 +63,10 @@ const STATE = GdUnitInspectorTreeConstants.STATE
 
 
 var _tree_root: TreeItem
+var _current_selected_item: TreeItem = null
 var _item_hash := Dictionary()
 var _current_tree_view_mode := GdUnitSettings.get_inspector_tree_view_mode()
+var _run_test_recovery := true
 
 
 func _build_cache_key(resource_path: String, test_name: String) -> Array:
@@ -195,6 +199,11 @@ func is_test_id(item: TreeItem, id: GdUnitGUID) -> bool:
 	var test_case: GdUnitTestCase = item.get_meta(META_TEST_CASE)
 	return test_case.guid.equals(id)
 
+
+func disable_test_recovery() -> void:
+	_run_test_recovery = false
+
+
 @warning_ignore("return_value_discarded")
 func _ready() -> void:
 	_context_menu.set_item_icon(CONTEXT_MENU_RUN_ID, GdUnitUiTools.get_icon("Play"))
@@ -215,6 +224,8 @@ func _ready() -> void:
 	var command_handler := GdUnitCommandHandler.instance()
 	command_handler.gdunit_runner_start.connect(_on_gdunit_runner_start)
 	command_handler.gdunit_runner_stop.connect(_on_gdunit_runner_stop)
+	if _run_test_recovery:
+		GdUnitTestDiscoverer.restore_last_session()
 
 
 # we need current to manually redraw bacause of the animation bug
@@ -226,6 +237,7 @@ func _process(_delta: float) -> void:
 
 func init_tree() -> void:
 	cleanup_tree()
+	_tree.deselect_all()
 	_tree.set_hide_root(true)
 	_tree.ensure_cursor_is_visible()
 	_tree.set_allow_reselect(true)
@@ -255,6 +267,7 @@ func cleanup_tree() -> void:
 		return
 	_free_recursive()
 	_tree.clear()
+	_current_selected_item = null
 
 
 func _free_recursive(items:=_tree_root.get_children()) -> void:
@@ -555,11 +568,12 @@ func set_state_running(item: TreeItem) -> void:
 	if parent != _tree_root:
 		set_state_running(parent)
 	# force scrolling to current test case
-	@warning_ignore("return_value_discarded")
-	select_item(item)
+	_tree.scroll_to_item(item, true)
 
 
 func set_state_succeded(item: TreeItem) -> void:
+	if item == _tree_root:
+		return
 	item.set_custom_color(0, Color.GREEN)
 	item.set_custom_color(1, Color.GREEN)
 	item.set_meta(META_GDUNIT_STATE, STATE.SUCCESS)
@@ -753,7 +767,7 @@ func show_failed_report(selected_item: TreeItem) -> void:
 func update_test_suite(event: GdUnitEvent) -> void:
 	var item := _find_tree_item_by_path(extract_resource_path(event), event.suite_name())
 	if not item:
-		push_error("[GdUnitInspector:731] Internal Error: Can't find tree item for\n %s" % event)
+		push_error("[InspectorTreeMainPanel.gd:753] Internal Error: Can't find tree item for\n %s" % event)
 		return
 	if event.type() == GdUnitEvent.TESTSUITE_BEFORE:
 		set_state_running(item)
@@ -767,7 +781,7 @@ func update_test_suite(event: GdUnitEvent) -> void:
 func update_test_case(event: GdUnitEvent) -> void:
 	var item := _find_tree_item_by_id(_tree_root, event.guid())
 	if not item:
-		push_error("Internal Error: Can't find test id %s" % [event.guid()])
+		#push_error("Internal Error: Can't find test id %s" % [event.guid()])
 		return
 	if event.type() == GdUnitEvent.TESTCASE_BEFORE:
 		set_state_running(item)
@@ -791,10 +805,10 @@ func create_item(parent: TreeItem, test: GdUnitTestCase, item_name: String, type
 			item.set_meta(META_TEST_CASE, test)
 		GdUnitType.TEST_GROUP:
 			# We need to create a copy of the test record meta with a new uniqe guid
-			item.set_meta(META_TEST_CASE, GdUnitTestCase.from(test.source_file, test.line_number, test.test_name))
+			item.set_meta(META_TEST_CASE, GdUnitTestCase.from(test.suite_resource_path, test.source_file, test.line_number, test.test_name))
 		GdUnitType.TEST_SUITE:
 			# We need to create a copy of the test record meta with a new uniqe guid
-			item.set_meta(META_TEST_CASE, GdUnitTestCase.from(test.source_file, test.line_number, test.suite_name))
+			item.set_meta(META_TEST_CASE, GdUnitTestCase.from(test.suite_resource_path, test.source_file, test.line_number, test.suite_name))
 			# We need to add the suite item to the item cache by path because the guid is not provided
 			add_tree_item_to_cache(test.source_file, item_name, item)
 
@@ -1149,6 +1163,8 @@ func _on_Tree_item_selected() -> void:
 	if not _context_menu.is_item_disabled(CONTEXT_MENU_RUN_ID):
 		var selected_item: TreeItem = _tree.get_selected()
 		show_failed_report(selected_item)
+	_current_selected_item = _tree.get_selected()
+	tree_item_selected.emit(_current_selected_item)
 
 
 # Opens the test suite
@@ -1178,7 +1194,7 @@ func _on_Tree_item_activated() -> void:
 # external signal receiver
 ################################################################################
 func _on_gdunit_runner_start() -> void:
-	reset_tree_state(_tree_root)
+	reset_tree_state(_current_selected_item)
 	_context_menu.set_item_disabled(CONTEXT_MENU_RUN_ID, true)
 	_context_menu.set_item_disabled(CONTEXT_MENU_DEBUG_ID, true)
 	clear_reports()
@@ -1204,6 +1220,7 @@ func _on_gdunit_event(event: GdUnitEvent) -> void:
 
 		GdUnitEvent.DISCOVER_END:
 			sort_tree_items(_tree_root)
+			select_item(_tree_root.get_first_child())
 			_discover_hint.visible = false
 			_tree_root.visible = true
 			#_dump_tree_as_json("tree_example_discovered")
@@ -1213,6 +1230,7 @@ func _on_gdunit_event(event: GdUnitEvent) -> void:
 
 		GdUnitEvent.STOP:
 			sort_tree_items(_tree_root)
+			select_item(_current_selected_item)
 			#_dump_tree_as_json("tree_example")
 
 		GdUnitEvent.TESTCASE_BEFORE:

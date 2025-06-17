@@ -34,14 +34,7 @@ public partial class HumanPlayerNode : Participant
         {
             Opponent.Attack(this, (int)attack);
         }
-
-        if (ScorePanel is ScorePanel sp)
-        {
-            sp.UpdateScores(matches);
-        }
-        else
-        {
-            GD.Print("Cast failed!");
-        }
+        
+        ScorePanel.UpdateScores(matches);
     }
 }
