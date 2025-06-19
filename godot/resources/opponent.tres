@@ -7,5 +7,5 @@ script = ExtResource("1_xongv")
 HitPoints = 100
 MaxHitPoints = 100
 Armor = 3
-Attack = 10
+Attack = 3
 metadata/_custom_type_script = "uid://bpvabkd6ra6x0"

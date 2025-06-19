@@ -12,6 +12,7 @@ namespace PuzzleFight.Common
         /*GemPurple,
         GemYellow,*/
         Sword,
+        Shield,
     }
 
     public static class StoneType

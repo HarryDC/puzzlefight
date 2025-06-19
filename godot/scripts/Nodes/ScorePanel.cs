@@ -6,12 +6,15 @@ using PuzzleFight.scripts.Resources;
 
 public partial class ScorePanel : Panel
 {
+    
     [Export] public Label RedLabel;
     [Export] public Label GreenLabel;
     [Export] public Label BlueLabel;
     [Export] public Label HpLabel;
     [Export] public Label AcLabel;
 
+    public Character Character;
+    
     private class ScoreData
     {
         public Label Label;
@@ -36,6 +39,7 @@ public partial class ScorePanel : Panel
     
     private Dictionary<StoneTypeEnum, ScoreData> _scores = new();
 
+
     public override void _Ready()
     {
         _scores.Clear();
@@ -44,7 +48,7 @@ public partial class ScorePanel : Panel
         _scores.Add(StoneTypeEnum.GemGreen, new ScoreData(GreenLabel));
         GD.Print("ScorePanel Initialized");
     }
-
+    
     public void UpdateScores(List<MatchData> matches)
     {
         foreach (var match in matches)
@@ -52,10 +56,6 @@ public partial class ScorePanel : Panel
             if (_scores.ContainsKey(match.Type))
             {
                 _scores[match.Type].Score += match.Count;
-            }
-            else
-            {
-                GD.PrintErr($"ScorePanel Can't add {match.Type} to score list");
             }
         }
     }

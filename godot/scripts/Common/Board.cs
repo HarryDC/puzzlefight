@@ -27,7 +27,6 @@ public class Board
     // Lower Left is 0/0
     public Board(int width, int height)
     {
-        Height = 5;
         Width = width;
         Height = height;
         _data = new Array2D<StoneTypeEnum>(Width, Height, StoneTypeEnum.None);
