@@ -1,8 +1,11 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using PuzzleFight.Common;
+using PuzzleFight.Nodes;
 using PuzzleFight.scripts.Resources;
+using PuzzleFight.Spells;
 
 public partial class ScorePanel : Panel
 {
@@ -46,7 +49,6 @@ public partial class ScorePanel : Panel
         _scores.Add(StoneTypeEnum.GemRed, new ScoreData(RedLabel));
         _scores.Add(StoneTypeEnum.GemBlue, new ScoreData(BlueLabel));
         _scores.Add(StoneTypeEnum.GemGreen, new ScoreData(GreenLabel));
-        GD.Print("ScorePanel Initialized");
     }
     
     public void UpdateScores(List<MatchData> matches)
@@ -60,10 +62,23 @@ public partial class ScorePanel : Panel
         }
     }
 
+    public override void _Process(double delta)
+    {
+        UpdateCharacter(Character);
+    }
+
     public void UpdateCharacter(Character character)
     {
         HpLabel.Text = $"{character.HitPoints}";
         AcLabel.Text = $"{character.Armor}";
+        if (Character == null)
+        {
+            Character = character;
+            foreach (var spell in Character.Spells)
+            {
+                AddSpell(spell);
+            }
+        }
     }
 
     public void Clear()
@@ -72,5 +87,14 @@ public partial class ScorePanel : Panel
         {
             _scores[stoneType].Score = 0;
         }
+    }
+
+    private void AddSpell(Spell spell)
+    {
+        var spellDisplay = ResourceLoader.Load<PackedScene>("res://scenes/spell_display.tscn").Instantiate<SpellDisplay>();
+        var layout = GetNode<VBoxContainer>("VBoxContainer");
+        spell.Caster = Character;
+        spellDisplay.Spell = spell;
+        layout.AddChild(spellDisplay);
     }
 }

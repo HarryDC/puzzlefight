@@ -1,0 +1,30 @@
+[gd_scene load_steps=6 format=3 uid="uid://bm7ti425vdybw"]
+
+[ext_resource type="Texture2D" uid="uid://b4jmfnhx42hve" path="res://assets/gui/blank_button/blank_enable.png" id="1_8ethb"]
+[ext_resource type="Script" uid="uid://dhafv4mo0yhod" path="res://scripts/Nodes/SpellDisplay.cs" id="1_mpqi5"]
+[ext_resource type="Texture2D" uid="uid://bb465t1frhqoy" path="res://assets/gui/blank_button/blank_hover.png" id="2_62w2o"]
+[ext_resource type="FontFile" uid="uid://ddhu1od53rwmf" path="res://assets/Fredoka-SemiBold.ttf" id="3_62w2o"]
+[ext_resource type="Texture2D" uid="uid://cdep0b7xl7csb" path="res://assets/gui/blank_button/blank_disable.png" id="3_vf25j"]
+
+[node name="HBoxContainer" type="HBoxContainer" node_paths=PackedStringArray("_label", "_button")]
+offset_right = 323.0
+offset_bottom = 100.0
+alignment = 1
+script = ExtResource("1_mpqi5")
+_label = NodePath("Label")
+_button = NodePath("TextureButton")
+
+[node name="TextureButton" type="TextureButton" parent="."]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+texture_normal = ExtResource("1_8ethb")
+texture_hover = ExtResource("2_62w2o")
+texture_disabled = ExtResource("3_vf25j")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_62w2o")
+theme_override_font_sizes/font_size = 64
+text = "Healing"

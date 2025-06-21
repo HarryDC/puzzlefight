@@ -50,6 +50,7 @@ public abstract partial class Participant : Node
         // Accumulate here, reset in PreMove
         Character.TempArmor += defenceCount;
         Character.Armor += defenceCount;
+        Character.AddGems(matches);
         
         var attack = (3.0f / matches.Count) * Character.Attack;
         

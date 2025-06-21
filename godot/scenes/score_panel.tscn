@@ -11,91 +11,83 @@ offset_top = 25.0
 offset_right = 465.0
 offset_bottom = 808.0
 script = ExtResource("1_g4u8w")
-RedLabel = NodePath("ScoreRed")
-GreenLabel = NodePath("ScoreGreen")
-BlueLabel = NodePath("ScoreBlue")
-HpLabel = NodePath("ScoreHP")
-AcLabel = NodePath("ScoreAC")
+RedLabel = NodePath("VBoxContainer/HBoxContainer/ScoreRed")
+GreenLabel = NodePath("VBoxContainer/HBoxContainer2/ScoreGreen")
+BlueLabel = NodePath("VBoxContainer/HBoxContainer3/ScoreBlue")
+HpLabel = NodePath("VBoxContainer/HBoxContainer4/ScoreHP")
+AcLabel = NodePath("VBoxContainer/HBoxContainer5/ScoreAC")
 
-[node name="LabelRed" type="Label" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 0
-offset_right = 33.0
-offset_bottom = 23.0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="LabelRed" type="Label" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
 text = "Red:"
 label_settings = SubResource("LabelSettings_0hol4")
 
-[node name="ScoreRed" type="Label" parent="."]
-layout_mode = 0
-offset_left = 240.0
-offset_right = 375.0
-offset_bottom = 88.0
+[node name="ScoreRed" type="Label" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
 text = "0"
 label_settings = SubResource("LabelSettings_0hol4")
 
-[node name="LabelGreen" type="Label" parent="."]
-layout_mode = 0
-offset_top = 120.0
-offset_right = 41.0
-offset_bottom = 208.0
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="LabelGreen" type="Label" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
 text = "Green:"
 label_settings = SubResource("LabelSettings_0hol4")
 
-[node name="ScoreGreen" type="Label" parent="."]
-layout_mode = 0
-offset_left = 240.0
-offset_top = 120.0
-offset_right = 446.0
-offset_bottom = 208.0
+[node name="ScoreGreen" type="Label" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
 text = "0"
 label_settings = SubResource("LabelSettings_0hol4")
 
-[node name="LabelBlue" type="Label" parent="."]
-layout_mode = 0
-offset_top = 240.0
-offset_right = 41.0
-offset_bottom = 328.0
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="LabelBlue" type="Label" parent="VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
 text = "Blue:"
 label_settings = SubResource("LabelSettings_0hol4")
 
-[node name="ScoreBlue" type="Label" parent="."]
-layout_mode = 0
-offset_left = 240.0
-offset_top = 240.0
-offset_right = 460.0
-offset_bottom = 328.0
+[node name="ScoreBlue" type="Label" parent="VBoxContainer/HBoxContainer3"]
+layout_mode = 2
 text = "0"
 label_settings = SubResource("LabelSettings_0hol4")
 
-[node name="ScoreHP" type="Label" parent="."]
-layout_mode = 0
-offset_left = 240.0
-offset_top = 360.0
-offset_right = 459.0
-offset_bottom = 448.0
-text = "0"
-label_settings = SubResource("LabelSettings_0hol4")
+[node name="HBoxContainer4" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
 
-[node name="LabelHP" type="Label" parent="."]
-layout_mode = 0
-offset_top = 360.0
-offset_right = 41.0
-offset_bottom = 448.0
+[node name="LabelHP" type="Label" parent="VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+size_flags_horizontal = 3
 text = "HP:"
 label_settings = SubResource("LabelSettings_0hol4")
 
-[node name="LabelAC" type="Label" parent="."]
-layout_mode = 0
-offset_top = 480.0
-offset_right = 41.0
-offset_bottom = 568.0
+[node name="ScoreHP" type="Label" parent="VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+text = "0"
+label_settings = SubResource("LabelSettings_0hol4")
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="LabelAC" type="Label" parent="VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+size_flags_horizontal = 3
 text = "AC:"
 label_settings = SubResource("LabelSettings_0hol4")
 
-[node name="ScoreAC" type="Label" parent="."]
-layout_mode = 0
-offset_left = 240.0
-offset_top = 480.0
-offset_right = 395.0
-offset_bottom = 568.0
+[node name="ScoreAC" type="Label" parent="VBoxContainer/HBoxContainer5"]
+layout_mode = 2
 text = "0"
 label_settings = SubResource("LabelSettings_0hol4")

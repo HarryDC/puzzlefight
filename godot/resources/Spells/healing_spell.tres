@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="HealingSpell" load_steps=2 format=3 uid="uid://csij3yc4m1m2x"]
+
+[ext_resource type="Script" uid="uid://cjlk4tihh03vg" path="res://scripts/Resources/Spells/HealingSpell.cs" id="1_b7bh5"]
+
+[resource]
+script = ExtResource("1_b7bh5")
+Amount = 5
+Level = 1
+metadata/_custom_type_script = "uid://cjlk4tihh03vg"
