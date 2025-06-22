@@ -9,7 +9,6 @@
 [node name="HBoxContainer" type="HBoxContainer" node_paths=PackedStringArray("_label", "_button")]
 offset_right = 323.0
 offset_bottom = 100.0
-alignment = 1
 script = ExtResource("1_mpqi5")
 _label = NodePath("Label")
 _button = NodePath("TextureButton")

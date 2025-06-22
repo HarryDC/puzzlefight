@@ -12,7 +12,7 @@ public partial class Healing : Spell
     public Healing()
     {
         Name = Tr("Healing");
-        Material = new List<MatchData> { new MatchData(1, StoneTypeEnum.GemRed) };
+        Material = new List<MatchData> { new MatchData(5, StoneTypeEnum.GemRed) };
     }
 
     public override bool Cast()

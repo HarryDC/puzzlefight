@@ -1,7 +1,5 @@
 using Godot;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using PuzzleFight.Common;
 using PuzzleFight.Nodes;
 using PuzzleFight.scripts.Resources;
@@ -15,6 +13,7 @@ public partial class ScorePanel : PanelContainer
     [Export] public Label BlueLabel;
     [Export] public Label HpLabel;
     [Export] public Label AcLabel;
+    [Export] public Label AtkLabel;
 
     public Character Character;
     
@@ -69,6 +68,7 @@ public partial class ScorePanel : PanelContainer
     {
         HpLabel.Text = $"{character.HitPoints}";
         AcLabel.Text = $"{character.Armor}";
+        AtkLabel.Text = $"{character.Attack}";
         if (Character == null)
         {
             Character = character;

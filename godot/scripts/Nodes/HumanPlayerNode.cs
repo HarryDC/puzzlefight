@@ -1,8 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-using Godot;
-using PuzzleFight.Common;
-
 namespace PuzzleFight.Nodes;
 
 public partial class HumanPlayerNode : Participant
