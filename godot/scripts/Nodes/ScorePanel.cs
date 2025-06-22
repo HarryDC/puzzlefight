@@ -51,20 +51,18 @@ public partial class ScorePanel : Panel
         _scores.Add(StoneTypeEnum.GemGreen, new ScoreData(GreenLabel));
     }
     
-    public void UpdateScores(List<MatchData> matches)
+    public void UpdateScores(Character character)
     {
-        foreach (var match in matches)
+        foreach (var (type, count) in Character.Stash)
         {
-            if (_scores.ContainsKey(match.Type))
-            {
-                _scores[match.Type].Score += match.Count;
-            }
+            _scores[type].Score = count;
         }
     }
 
     public override void _Process(double delta)
     {
         UpdateCharacter(Character);
+        UpdateScores(Character);
     }
 
     public void UpdateCharacter(Character character)

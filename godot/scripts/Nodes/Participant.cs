@@ -58,7 +58,5 @@ public abstract partial class Participant : Node
         {
             Opponent.Attack(this, (int)attack);
         }
-        ScorePanel.UpdateScores(matches);
-        ScorePanel.UpdateCharacter(Character);
     }
 }
