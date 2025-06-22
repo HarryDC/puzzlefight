@@ -7,7 +7,7 @@ using PuzzleFight.Nodes;
 using PuzzleFight.scripts.Resources;
 using PuzzleFight.Spells;
 
-public partial class ScorePanel : Panel
+public partial class ScorePanel : PanelContainer
 {
     
     [Export] public Label RedLabel;

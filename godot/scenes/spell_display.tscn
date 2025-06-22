@@ -15,7 +15,7 @@ _label = NodePath("Label")
 _button = NodePath("TextureButton")
 
 [node name="TextureButton" type="TextureButton" parent="."]
-custom_minimum_size = Vector2(100, 100)
+custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 texture_normal = ExtResource("1_8ethb")
 texture_hover = ExtResource("2_62w2o")

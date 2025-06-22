@@ -44,10 +44,14 @@ Opponent = NodePath("../Player")
 ScorePanel = NodePath("../OpponentPanel")
 
 [node name="OpponentPanel" parent="." instance=ExtResource("5_kvpfn")]
-offset_left = 1453.0
-offset_top = 17.0
-offset_right = 1911.0
-offset_bottom = 800.0
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -458.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 461.0
+grow_horizontal = 0
 
 [node name="Player" type="Node" parent="." node_paths=PackedStringArray("Opponent", "ScorePanel")]
 script = ExtResource("6_dinhu")
@@ -59,7 +63,7 @@ ScorePanel = NodePath("../PlayerPanel")
 offset_left = -2.0
 offset_top = 2.0
 offset_right = 456.0
-offset_bottom = 785.0
+offset_bottom = 484.0
 
 [connection signal="ParticipantDeath" from="Opponent" to="." method="OnOpponentDeath"]
 [connection signal="ParticipantDeath" from="Player" to="." method="OnPlayerDeath"]
