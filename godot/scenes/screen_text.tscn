@@ -1,0 +1,30 @@
+[gd_scene load_steps=3 format=3 uid="uid://dncd48go052pn"]
+
+[ext_resource type="FontFile" uid="uid://ddhu1od53rwmf" path="res://assets/Fredoka-SemiBold.ttf" id="1_kkfqg"]
+[ext_resource type="Script" uid="uid://c8awiv2blhugy" path="res://scripts/Nodes/ScreenText.cs" id="1_mgbt0"]
+
+[node name="ScreenText" type="Node2D" node_paths=PackedStringArray("Label")]
+script = ExtResource("1_mgbt0")
+Label = NodePath("Node2D2/Label")
+
+[node name="Node2D2" type="Node2D" parent="."]
+
+[node name="Label" type="Label" parent="Node2D2"]
+z_index = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -125.0
+offset_top = -39.5
+offset_right = 125.0
+offset_bottom = 39.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.92549, 0.815686, 0, 1)
+theme_override_colors/font_outline_color = Color(0.105882, 0.458824, 0, 1)
+theme_override_constants/outline_size = 20
+theme_override_fonts/font = ExtResource("1_kkfqg")
+theme_override_font_sizes/font_size = 256
+text = "TestText"

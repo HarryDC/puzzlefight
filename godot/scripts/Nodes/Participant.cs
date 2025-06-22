@@ -47,6 +47,11 @@ public abstract partial class Participant : Node
         var defenceCount = (from match in matches
             where match.Type == StoneTypeEnum.Shield select match).Sum(m => m.Count);
         
+        var text = ResourceLoader.Load<PackedScene>($"res://scenes/screen_text.tscn").Instantiate<ScreenText>();
+        text.Text = "-" + attackCount.ToString();
+        text.Position = new Vector2(400, 400);
+        AddChild(text);
+        
         // Accumulate here, reset in PreMove
         Character.TempArmor += defenceCount;
         Character.Armor += defenceCount;
