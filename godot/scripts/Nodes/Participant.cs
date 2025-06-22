@@ -16,20 +16,26 @@ public abstract partial class Participant : Node
     [Signal]
     public delegate void ParticipantDeathEventHandler();
     
+    [Signal]
+    public delegate void TextDisplayEventHandler(string text);
+    
     public abstract void Setup(BoardNode board);
     public abstract void TakeTurn();
     
     public override void _Ready()
     {
         ScorePanel.UpdateCharacter(Character);
+
+        var textHandler = GetNode<TextHandler>("/root/Game/TextHandler");
+        TextDisplay += textHandler.OnEmitText;
     }
 
     public void Attack(Participant attacker, int damage)
     {
-        GD.Print($"{attacker} attacking {Name} for {damage} damage");
         var realDamage = Math.Max(0, damage - Character.Armor);
         Character.HitPoints -= realDamage;
-        GD.Print($"{Name} hit for {realDamage} damage");
+        
+        EmitSignal(SignalName.TextDisplay, $"-{realDamage}HP");
         
         ScorePanel.UpdateCharacter(Character);
         
@@ -46,11 +52,6 @@ public abstract partial class Participant : Node
         
         var defenceCount = (from match in matches
             where match.Type == StoneTypeEnum.Shield select match).Sum(m => m.Count);
-        
-        var text = ResourceLoader.Load<PackedScene>($"res://scenes/screen_text.tscn").Instantiate<ScreenText>();
-        text.Text = "-" + attackCount.ToString();
-        text.Position = new Vector2(400, 400);
-        AddChild(text);
         
         // Accumulate here, reset in PreMove
         Character.TempArmor += defenceCount;

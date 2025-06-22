@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://dvxfom0n1iw03"]
+[gd_scene load_steps=10 format=3 uid="uid://dvxfom0n1iw03"]
 
 [ext_resource type="Script" uid="uid://bjxh28i17iov1" path="res://scripts/Nodes/Game.cs" id="1_gee14"]
 [ext_resource type="Script" uid="uid://dvb6loya25b6w" path="res://scripts/Nodes/BoardNode.cs" id="1_u5sy4"]
+[ext_resource type="Script" uid="uid://dbpwrcnqchncv" path="res://scripts/Nodes/TextHandler.cs" id="2_0tnpc"]
 [ext_resource type="Texture2D" uid="uid://btia87n605pt6" path="res://assets/selection.png" id="2_gee14"]
 [ext_resource type="Script" uid="uid://wosupgpvivib" path="res://scripts/Nodes/AiPlayerNode.cs" id="3_0tnpc"]
 [ext_resource type="Resource" uid="uid://cx3cy1efr0o62" path="res://resources/opponent.tres" id="4_vtaks"]
@@ -11,6 +12,11 @@
 
 [node name="Game" type="Node"]
 script = ExtResource("1_gee14")
+
+[node name="TextHandler" type="Node2D" parent="."]
+script = ExtResource("2_0tnpc")
+HMargin = 100
+VMargin = 100
 
 [node name="Board" type="Node2D" parent="." node_paths=PackedStringArray("SelectionSprite1", "SelectionSprite2", "Participants")]
 position = Vector2(704, 332)
