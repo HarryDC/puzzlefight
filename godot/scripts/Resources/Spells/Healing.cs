@@ -1,17 +1,18 @@
+using System.Collections.Generic;
 using Godot;
 using PuzzleFight.Common;
 
 namespace PuzzleFight.Spells;
 
 [GlobalClass]
-public partial class HealingSpell : Spell
+public partial class Healing : Spell
 {
     [Export] public int Amount = 5;
     
-    public HealingSpell()
+    public Healing()
     {
-        Name = "Healing";
-        Material = new() { new MatchData(1, StoneTypeEnum.GemRed) };
+        Name = Tr("Healing");
+        Material = new List<MatchData> { new MatchData(1, StoneTypeEnum.GemRed) };
     }
 
     public override bool Cast()

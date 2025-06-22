@@ -1,8 +1,10 @@
-[gd_resource type="Resource" script_class="Character" load_steps=4 format=3 uid="uid://dnndpd7os2fr0"]
+[gd_resource type="Resource" script_class="Character" load_steps=6 format=3 uid="uid://dnndpd7os2fr0"]
 
 [ext_resource type="Script" uid="uid://bpvabkd6ra6x0" path="res://scripts/Resources/Character.cs" id="1_rjq7u"]
 [ext_resource type="Script" uid="uid://4pvhoeksvvvp" path="res://scripts/Resources/Spells/Spell.cs" id="1_yl67e"]
 [ext_resource type="Resource" uid="uid://csij3yc4m1m2x" path="res://resources/Spells/healing_spell.tres" id="2_gk4t3"]
+[ext_resource type="Resource" uid="uid://cldf6br7usbwr" path="res://resources/Spells/add_attack_spell.tres" id="3_4boxr"]
+[ext_resource type="Resource" uid="uid://c3fgnb4nq1gie" path="res://resources/Spells/add_armor_spell.tres" id="4_2nhab"]
 
 [resource]
 script = ExtResource("1_rjq7u")
@@ -10,5 +12,5 @@ HitPoints = 100
 MaxHitPoints = 100
 Armor = 3
 Attack = 4
-Spells = Array[ExtResource("1_yl67e")]([ExtResource("2_gk4t3")])
+Spells = Array[ExtResource("1_yl67e")]([ExtResource("2_gk4t3"), ExtResource("3_4boxr"), ExtResource("4_2nhab")])
 metadata/_custom_type_script = "uid://bpvabkd6ra6x0"

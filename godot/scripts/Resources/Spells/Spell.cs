@@ -11,8 +11,7 @@ public partial class Spell : Resource
 {
     [Export] public int Level = 1;
 
-    [Export]
-    public string Name { get; protected set; } = "Sample";
+    public string Name { get; protected set; }= "";
 
     [Export] public Character Caster;
     

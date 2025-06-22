@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="AddArmor" load_steps=2 format=3 uid="uid://c3fgnb4nq1gie"]
+
+[ext_resource type="Script" uid="uid://d0aiqft7owiyy" path="res://scripts/Resources/Spells/AddArmor.cs" id="1_qiccb"]
+
+[resource]
+script = ExtResource("1_qiccb")
+Amount = 2
+Level = 1
+metadata/_custom_type_script = "uid://d0aiqft7owiyy"
