@@ -9,6 +9,7 @@ public partial class SpellDisplay : Node
     [Export] TextureButton _button;
     
     private Spell _spell;
+    private TextHandler _textHandler;
 
     [Export]
     public Spell Spell
@@ -21,14 +22,22 @@ public partial class SpellDisplay : Node
         }
     }
 
+    [Export] public Participant Participant;
+
     public override void _Ready()
     {
-        _button.Pressed += () => _spell.Cast();
+        _textHandler = GetNode<TextHandler>("/root/Game/TextHandler");
+        _button.Pressed += ExecuteCastSpell;
+    }
+
+    private void ExecuteCastSpell()
+    {
+        Participant.Cast(_spell);
     }
 
     public override void _Process(double delta)
     {
-        _button.Disabled = !_spell.CanCast();
+        _button.Disabled = !_spell.CanCast(Participant.Character);
     }
     
     

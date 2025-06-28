@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Godot;
 using PuzzleFight.Common;
+using PuzzleFight.scripts.Resources;
 
 namespace PuzzleFight.Spells;
 
@@ -12,13 +13,15 @@ public partial class Healing : Spell
     public Healing()
     {
         Name = Tr("Healing");
+        Effect = $"+{Amount}HP";
+        Description = $"Level {Level} {Tr("Healing")} {Amount}HP";
         Material = new List<MatchData> { new MatchData(5, StoneTypeEnum.GemRed) };
     }
 
-    public override bool Cast()
+    public override bool Cast(Character caster)
     {
-        if (!base.Cast()) return false;
-        Caster.HitPoints += Amount;
+        if (!base.Cast(caster)) return false;
+        caster.HitPoints += Amount;
         return true;
     }
 }

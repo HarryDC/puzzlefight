@@ -42,8 +42,9 @@ _selectionSprite2 = NodePath("../Board/SelectionTwo")
 Character = ExtResource("4_vtaks")
 Opponent = NodePath("../Player")
 ScorePanel = NodePath("../OpponentPanel")
+Position = 2
 
-[node name="OpponentPanel" parent="." instance=ExtResource("5_kvpfn")]
+[node name="OpponentPanel" parent="." node_paths=PackedStringArray("Participant") instance=ExtResource("5_kvpfn")]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
@@ -52,18 +53,21 @@ offset_top = 0.0
 offset_right = 0.0
 offset_bottom = 461.0
 grow_horizontal = 0
+Participant = NodePath("../Opponent")
 
 [node name="Player" type="Node" parent="." node_paths=PackedStringArray("Opponent", "ScorePanel")]
 script = ExtResource("6_dinhu")
 Character = ExtResource("7_kvuet")
 Opponent = NodePath("../Opponent")
 ScorePanel = NodePath("../PlayerPanel")
+Position = 1
 
-[node name="PlayerPanel" parent="." instance=ExtResource("5_kvpfn")]
+[node name="PlayerPanel" parent="." node_paths=PackedStringArray("Participant") instance=ExtResource("5_kvpfn")]
 offset_left = -2.0
 offset_top = 2.0
 offset_right = 456.0
 offset_bottom = 484.0
+Participant = NodePath("../Player")
 
 [connection signal="ParticipantDeath" from="Opponent" to="." method="OnOpponentDeath"]
 [connection signal="ParticipantDeath" from="Player" to="." method="OnPlayerDeath"]

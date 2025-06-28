@@ -7,27 +7,28 @@ using PuzzleFight.scripts.Resources;
 namespace PuzzleFight.Spells;
 
 [GlobalClass]
-public partial class Spell : Resource
+public abstract partial class Spell : Resource
 {
     [Export] public int Level = 1;
 
     public string Name { get; protected set; }= "";
-
-    [Export] public Character Caster;
+    public string Effect { get; protected set; } = "";
+    
+    public string Description { get; protected set; } = "";
     
     protected List<MatchData> Material = new();
     
-    public bool CanCast()
+    public bool CanCast(Character caster)
     {
-        Debug.Assert(Caster is not null);
-        return Caster.HasGems(Material);
+        Debug.Assert(caster is not null);
+        return caster.HasGems(Material);
     }
     
-    public virtual bool Cast()
+    public virtual bool Cast(Character caster)
     {
-        Debug.Assert(Caster is not null);
-        if (!CanCast()) return false;
-        Caster.RemoveGems(Material);
+        Debug.Assert(caster is not null);
+        if (!CanCast(caster)) return false;
+        caster.RemoveGems(Material);
         return true;
     }
 }

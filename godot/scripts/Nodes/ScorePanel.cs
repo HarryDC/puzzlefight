@@ -15,7 +15,8 @@ public partial class ScorePanel : PanelContainer
     [Export] public Label AcLabel;
     [Export] public Label AtkLabel;
 
-    public Character Character;
+    [Export] public Participant Participant;
+    private Character _character;
     
     private class ScoreData
     {
@@ -52,7 +53,7 @@ public partial class ScorePanel : PanelContainer
     
     public void UpdateScores(Character character)
     {
-        foreach (var (type, count) in Character.Stash)
+        foreach (var (type, count) in _character.Stash)
         {
             _scores[type].Score = count;
         }
@@ -60,8 +61,8 @@ public partial class ScorePanel : PanelContainer
 
     public override void _Process(double delta)
     {
-        UpdateCharacter(Character);
-        UpdateScores(Character);
+        UpdateCharacter(_character);
+        UpdateScores(_character);
     }
 
     public void UpdateCharacter(Character character)
@@ -69,10 +70,10 @@ public partial class ScorePanel : PanelContainer
         HpLabel.Text = $"{character.HitPoints}";
         AcLabel.Text = $"{character.Armor}";
         AtkLabel.Text = $"{character.Attack}";
-        if (Character == null)
+        if (_character == null)
         {
-            Character = character;
-            foreach (var spell in Character.Spells)
+            _character = Participant.Character;
+            foreach (var spell in _character.Spells)
             {
                 AddSpell(spell);
             }
@@ -91,8 +92,8 @@ public partial class ScorePanel : PanelContainer
     {
         var spellDisplay = ResourceLoader.Load<PackedScene>("res://scenes/spell_display.tscn").Instantiate<SpellDisplay>();
         var layout = GetNode<VBoxContainer>("VBoxContainer");
-        spell.Caster = Character;
         spellDisplay.Spell = spell;
+        spellDisplay.Participant = Participant;
         layout.AddChild(spellDisplay);
     }
 }

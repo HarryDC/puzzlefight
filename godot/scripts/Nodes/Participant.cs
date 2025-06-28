@@ -4,26 +4,38 @@ using System.Linq;
 using Godot;
 using PuzzleFight.Common;
 using PuzzleFight.scripts.Resources;
+using PuzzleFight.Spells;
 
 namespace PuzzleFight.Nodes;
 
+/// <summary>
+/// Node type for an entity in the game (the player, any opponent). Each entity can trigger actions
+/// dole out damage, etc
+/// </summary>
+/// <remarks>
+/// Each Participant (Node) has a Character (RPG Attributes) attached to it, try and use the Participant
+/// when interacting between Godot Nodes, and the Character when interacting on the Game System level
+/// Eg. An attack will trigger the actual cause of damage on the Character class, but the UI effect
+/// will be triggered on the Participant level
+/// </remarks>
 public abstract partial class Participant : Node
 {
     [Export] public Character Character;
     [Export] public Participant Opponent;
     [Export] public ScorePanel ScorePanel;
+    [Export] public TextHandler.Position Position;
     
-    [Signal]
-    public delegate void ParticipantDeathEventHandler();
+    [Signal] public delegate void ParticipantDeathEventHandler();
     
-    [Signal]
-    public delegate void TextDisplayEventHandler(string text);
+    [Signal] public delegate void TextDisplayEventHandler(string text, int position);
     
     public abstract void Setup(BoardNode board);
     public abstract void TakeTurn();
     
     public override void _Ready()
     {
+        Character.Participant = this;
+        
         ScorePanel.UpdateCharacter(Character);
 
         var textHandler = GetNode<TextHandler>("/root/Game/TextHandler");
@@ -35,7 +47,7 @@ public abstract partial class Participant : Node
         var realDamage = Math.Max(0, damage - Character.Armor);
         Character.HitPoints -= realDamage;
         
-        EmitSignal(SignalName.TextDisplay, $"-{realDamage}HP");
+        EmitSignal(SignalName.TextDisplay, $"-{realDamage}HP", (int)Position);
         
         ScorePanel.UpdateCharacter(Character);
         
@@ -59,7 +71,7 @@ public abstract partial class Participant : Node
             Character.TempArmor += defenceCount;
             Character.Armor += defenceCount;
         
-            EmitSignal(SignalName.TextDisplay, $"+{defenceCount}AC");
+            EmitSignal(SignalName.TextDisplay, $"+{defenceCount}AC", (int)Position);
         }
         
         Character.AddGems(matches);
@@ -70,5 +82,11 @@ public abstract partial class Participant : Node
         {
             Opponent.Attack(this, (int)attack);
         }
+    }
+
+    public void Cast(Spell spell)
+    {
+        spell.Cast(Character);
+        EmitSignal(SignalName.TextDisplay, spell.Effect, (int)Position);
     }
 }

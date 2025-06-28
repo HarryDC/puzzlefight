@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using PuzzleFight.Common;
+using PuzzleFight.Nodes;
 using PuzzleFight.Spells;
 
 namespace PuzzleFight.scripts.Resources;
@@ -25,6 +26,14 @@ public partial class Character : Resource
     public Dictionary<StoneTypeEnum, int> Stash { get; private set; } = new();
     
     private readonly StoneTypeEnum[] _gemTypes = { StoneTypeEnum.GemRed, StoneTypeEnum.GemBlue, StoneTypeEnum.GemGreen };
+
+    private WeakRef _participant;
+
+    public Participant Participant
+    {
+        get => _participant.GetRef().As<Participant>();
+        set => _participant = WeakRef(value);
+    }
     
     public Character()
     {
@@ -35,11 +44,6 @@ public partial class Character : Resource
         foreach (var type in _gemTypes)
         {
             Stash[type] = 0;
-        }
-
-        foreach (var spell in Spells)
-        {
-            spell.Caster = this;
         }
     }
 
@@ -82,5 +86,10 @@ public partial class Character : Resource
                 return false;
         }
         return true;
+    }
+
+    public bool Cast(Spell spell)
+    {
+        return spell.Cast(this);
     }
 }

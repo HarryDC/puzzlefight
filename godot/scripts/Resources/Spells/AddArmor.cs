@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Godot;
 using PuzzleFight.Common;
+using PuzzleFight.scripts.Resources;
 
 namespace PuzzleFight.Spells;
 
@@ -12,13 +13,15 @@ public partial class AddArmor : Spell
     public AddArmor()
     {
         Name = Tr("Add Armor");
+        Effect = $"+{Amount}AC";
+        Description = $"Level {Level} {Tr("Add Armor")} {Amount}";
         Material = new List<MatchData> { new MatchData(5, StoneTypeEnum.GemBlue) };
     }
 
-    public override bool Cast()
+    public override bool Cast(Character caster)
     {
-        if (!base.Cast()) return false;
-        Caster.Armor += Amount;
+        if (!base.Cast(caster)) return false;
+        caster.Armor += Amount;
         return true;
     }
 }
