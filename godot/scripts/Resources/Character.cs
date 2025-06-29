@@ -18,6 +18,8 @@ public partial class Character : Resource
     [Export] public int MaxHitPoints { get; set; }
     [Export] public int Armor { get; set; }
     [Export] public int Attack { get; set; }
+
+    [Export] public int Actions { get; set; } = 1;
     
     [Export]
     public Godot.Collections.Array<Spell> Spells { get; set; } = new Godot.Collections.Array<Spell>();

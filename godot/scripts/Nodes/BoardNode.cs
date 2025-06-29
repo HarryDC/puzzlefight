@@ -193,10 +193,20 @@ public partial class BoardNode : Node2D
             DoRemoveAll();
             return;
         }
-
-        // Neither of the above hanppened
+        // Neither of the above happened
         // Change Participant 
-        _currentParticipant = (_currentParticipant + 1) % _participants.Count;
+        CheckEndRound();
+    }
+
+    public void CheckEndRound()
+    {
+
+        if (_participants[_currentParticipant].Actions == 0)
+        {
+            _participants[_currentParticipant].EndRound();
+            _currentParticipant = (_currentParticipant + 1) % _participants.Count;
+        }
+
         _participants[_currentParticipant].TakeTurn();
     }
 

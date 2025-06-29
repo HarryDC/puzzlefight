@@ -28,9 +28,18 @@ public abstract partial class Participant : Node
     [Signal] public delegate void ParticipantDeathEventHandler();
     
     [Signal] public delegate void TextDisplayEventHandler(string text, int position);
+
+    public int Actions = 0;
+
+    protected BoardNode BoardNode;
     
     public abstract void Setup(BoardNode board);
+    /// Called whenever this participant is supposed to make a move
     public abstract void TakeTurn();
+    /// <summary>
+    /// Called whenever 
+    /// </summary>
+    public abstract void EndRound();
     
     public override void _Ready()
     {
@@ -88,5 +97,6 @@ public abstract partial class Participant : Node
     {
         spell.Cast(Character);
         EmitSignal(SignalName.TextDisplay, spell.Effect, (int)Position);
+        BoardNode.CheckEndRound();
     }
 }

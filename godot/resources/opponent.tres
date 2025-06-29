@@ -8,4 +8,6 @@ HitPoints = 100
 MaxHitPoints = 100
 Armor = 3
 Attack = 3
+Actions = 1
+Spells = []
 metadata/_custom_type_script = "uid://bpvabkd6ra6x0"

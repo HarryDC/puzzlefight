@@ -7,24 +7,29 @@ namespace PuzzleFight.Nodes;
 
 public partial class AiPlayerNode : Participant
 {
-    private BoardNode _boardNode;
-    
     [Export] private Node2D _selectionSprite1;
     [Export] private Node2D _selectionSprite2;
    
     public override void Setup(BoardNode boardNode)
     {
-        _boardNode = boardNode;
+        BoardNode = boardNode;
+        Actions = Character.Actions;
     }
 
     public override void TakeTurn()
     {
+        Actions -= 1;
         Character.PreMoveUpdate();
-        var moves = _boardNode.Board.GetAllMoves();
-        var selected = HierarchicalMove(moves, _boardNode.Board);
+        var moves = BoardNode.Board.GetAllMoves();
+        var selected = HierarchicalMove(moves, BoardNode.Board);
         
         
-        _boardNode.StartAiMove(moves[selected], moves[selected+1]);
+        BoardNode.StartAiMove(moves[selected], moves[selected+1]);
+    }
+
+    public override void EndRound()
+    {
+        Actions = Character.Actions;
     }
 
     private int RandomMove(List<Vector2I> moves)
