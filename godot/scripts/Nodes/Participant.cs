@@ -73,7 +73,7 @@ public abstract partial class Participant : Node
         
         var defenceCount = (from match in matches
             where match.Type == StoneTypeEnum.Shield select match).Sum(m => m.Count);
-
+        
         if (defenceCount > 0)
         {
             // Accumulate here, reset in PreMove
@@ -81,6 +81,14 @@ public abstract partial class Participant : Node
             Character.Armor += defenceCount;
         
             EmitSignal(SignalName.TextDisplay, $"+{defenceCount}AC", (int)Position);
+        }
+        
+        
+        var hasFive = (from match in matches select match).Any(m => m.Count == 5);
+        if (hasFive)
+        {
+            ++Actions;
+            EmitSignalTextDisplay("Bonus Action", (int)Position);
         }
         
         Character.AddGems(matches);

@@ -12,5 +12,6 @@ HitPoints = 100
 MaxHitPoints = 100
 Armor = 3
 Attack = 4
+Actions = 1
 Spells = Array[ExtResource("1_yl67e")]([ExtResource("2_gk4t3"), ExtResource("3_4boxr"), ExtResource("4_2nhab")])
 metadata/_custom_type_script = "uid://bpvabkd6ra6x0"
