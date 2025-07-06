@@ -6,10 +6,12 @@ namespace PuzzleFight.Nodes;
 
 public partial class HumanPlayerNode : Participant
 {
+    private bool _isMyTurn = false;
     public override void _Input(InputEvent inputEvent)
     {
         if (inputEvent is InputEventMouseButton mouseEvent && mouseEvent.Pressed)
         {
+            if (BoardNode.IsAnimating || !_isMyTurn) return;
             if (mouseEvent.ButtonIndex == MouseButton.Right)
             {
                 BoardNode.ClearSelection();
@@ -18,8 +20,11 @@ public partial class HumanPlayerNode : Participant
 
             if (mouseEvent.ButtonIndex != MouseButton.Left) return;
             
-            // Convert mouse position to grid position
-            BoardNode.SelectPiece(mouseEvent.Position);
+            // If true is returned a valid move was made 
+            if (BoardNode.SelectPiece(mouseEvent.Position))
+            {
+                Actions -= 1;
+            }
         }            
     }
     
@@ -29,14 +34,21 @@ public partial class HumanPlayerNode : Participant
         Actions = Character.Actions;
     }
 
+    public override void BeginRound()
+    {
+        _isMyTurn = true;
+        Actions = Character.Actions;
+        ScorePanel.EnableButtons();
+    }
+
     public override void TakeTurn()
     {
-        Actions -= 1;
         Character.PreMoveUpdate();
     }
 
     public override void EndRound()
     {
-        Actions = Character.Actions;
+        _isMyTurn = false;
+        ScorePanel.BlockButtons();
     }
 }

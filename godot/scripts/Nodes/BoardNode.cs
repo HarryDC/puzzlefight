@@ -20,6 +20,7 @@ public partial class BoardNode : Node2D
 
     [Export] Godot.Collections.Array<Node> Participants { get; set; } = new Godot.Collections.Array<Node>();
     public Board Board { get; private set; }
+    public bool IsAnimating { get; private set; }
 
     List<Participant> _participants = new();
     int _currentParticipant;
@@ -73,7 +74,19 @@ public partial class BoardNode : Node2D
         if (position.X < 0 || position.Y < 0 || position.X >= Width || position.Y >= Height) return false;
 
         int pieceIndex = 0;
-        if (_selection[0].Item1) pieceIndex = 1;
+        if (_selection[0].Item1)
+        {
+            pieceIndex = 1;
+            // Validate second selection
+            var sel0Pos = _selection[0].Item2;
+            var euclid = Math.Abs(position.X - sel0Pos.X) + Math.Abs(position.Y - sel0Pos.Y);
+        
+            if (euclid is 0 or > 1)
+            {
+                ClearSelection();
+                return false;
+            };
+        }
         
         _selection[pieceIndex].Item1 = true;
         _selection[pieceIndex].Item2 = position;
@@ -81,7 +94,7 @@ public partial class BoardNode : Node2D
         var pos = new Vector2(_selection[pieceIndex].Item2.X, _selection[pieceIndex].Item2.Y) * Spacing;
         _selection[pieceIndex].Item3.Position = pos;
         if (pieceIndex == 1) return MakeMove();
-        else return true;
+        else return false;
     }
 
     public void ClearSelection(int pieceIndex = -1)
@@ -141,6 +154,7 @@ public partial class BoardNode : Node2D
                 p.Setup(this);
             }
         }
+        CurrentParticipant.BeginRound();
     }
 
     void RefreshBoard()
@@ -179,6 +193,7 @@ public partial class BoardNode : Node2D
 
     public bool StartSwap(Vector2I source, Vector2I target)
     {
+        IsAnimating = true;
         if (Board.IsValid(source, target))
         {
             // On valid swap, call EndSwap as the next step
@@ -235,14 +250,15 @@ public partial class BoardNode : Node2D
 
     public void CheckEndRound()
     {
-
-        if (_participants[_currentParticipant].Actions == 0)
+        if (CurrentParticipant.Actions == 0)
         {
-            _participants[_currentParticipant].EndRound();
+            CurrentParticipant.EndRound();
             _currentParticipant = (_currentParticipant + 1) % _participants.Count;
+            CurrentParticipant.BeginRound();
         }
 
-        _participants[_currentParticipant].TakeTurn();
+        IsAnimating = false;
+        CurrentParticipant.TakeTurn();
     }
 
     private void DoRemoveAll()

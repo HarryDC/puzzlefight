@@ -34,6 +34,10 @@ public abstract partial class Participant : Node
     protected BoardNode BoardNode;
     
     public abstract void Setup(BoardNode board);
+    
+    
+    public abstract void BeginRound();
+    
     /// Called whenever this participant is supposed to make a move
     public abstract void TakeTurn();
     /// <summary>
@@ -103,8 +107,11 @@ public abstract partial class Participant : Node
 
     public void Cast(Spell spell)
     {
+        if (Actions < 1) return;
+        --Actions;
         spell.Cast(Character);
         EmitSignal(SignalName.TextDisplay, spell.Effect, (int)Position);
         BoardNode.CheckEndRound();
     }
+
 }

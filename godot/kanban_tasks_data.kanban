@@ -16,7 +16,6 @@
 			"uuid": "e7f12744-f0f5-4dbc-807e-932574d7dffe",
 			"title": "Todo",
 			"tasks": [
-				"e46ca35d-26d2-42bb-ad3c-031d79f992ab",
 				"1b7c911f-824f-4057-822e-c5991f78c950",
 				"180d61f6-7412-4558-9d05-8bcc9c9db03b"
 			]
@@ -24,7 +23,9 @@
 		{
 			"uuid": "9f77b42b-ca4d-49e0-b316-5e634513abb5",
 			"title": "Doing",
-			"tasks": []
+			"tasks": [
+				"e46ca35d-26d2-42bb-ad3c-031d79f992ab"
+			]
 		},
 		{
 			"uuid": "e55ec4a8-bdb1-429d-83ba-555a22b0f3d0",
@@ -84,7 +85,7 @@
 		{
 			"uuid": "e46ca35d-26d2-42bb-ad3c-031d79f992ab",
 			"title": "Player ignore input events when its not their turn",
-			"description": "",
+			"description": "- Player should not be able to make a move while it's not theeir turn or even during their turn when the animation is still running \n- Spell buttons should not be active in this case either",
 			"category": "e5e8c6eb-1aad-4f75-a719-9a98c8550dbb",
 			"steps": []
 		},

@@ -7,12 +7,14 @@ namespace PuzzleFight.Nodes;
 
 public partial class AiPlayerNode : Participant
 {
-    [Export] private Node2D _selectionSprite1;
-    [Export] private Node2D _selectionSprite2;
-   
     public override void Setup(BoardNode boardNode)
     {
         BoardNode = boardNode;
+        Actions = Character.Actions;
+    }
+
+    public override void BeginRound()
+    {
         Actions = Character.Actions;
     }
 
@@ -30,7 +32,6 @@ public partial class AiPlayerNode : Participant
 
     public override void EndRound()
     {
-        Actions = Character.Actions;
     }
 
     private int RandomMove(List<Vector2I> moves)

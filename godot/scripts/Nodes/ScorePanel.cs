@@ -17,7 +17,8 @@ public partial class ScorePanel : PanelContainer
 
     [Export] public Participant Participant;
     private Character _character;
-    
+
+    private MouseFilterEnum _filter;
     private class ScoreData
     {
         public Label Label;
@@ -49,6 +50,18 @@ public partial class ScorePanel : PanelContainer
         _scores.Add(StoneTypeEnum.GemRed, new ScoreData(RedLabel));
         _scores.Add(StoneTypeEnum.GemBlue, new ScoreData(BlueLabel));
         _scores.Add(StoneTypeEnum.GemGreen, new ScoreData(GreenLabel));
+        _filter = GetMouseFilter();
+    }
+
+    public void BlockButtons()
+    {
+        _filter = GetMouseFilter();
+        SetMouseFilter(MouseFilterEnum.Stop);
+    }
+
+    public void EnableButtons()
+    {
+        SetMouseFilter(_filter);
     }
     
     public void UpdateScores(Character character)
