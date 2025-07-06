@@ -37,7 +37,7 @@ public abstract partial class Participant : Node
     /// Called whenever this participant is supposed to make a move
     public abstract void TakeTurn();
     /// <summary>
-    /// Called whenever 
+    /// Called whenever the participant is finished with the round
     /// </summary>
     public abstract void EndRound();
     

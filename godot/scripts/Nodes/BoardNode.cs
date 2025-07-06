@@ -27,63 +27,95 @@ public partial class BoardNode : Node2D
     private Participant CurrentParticipant => _participants[_currentParticipant];
 
     private Vector2I? _selected;
-    
+
+    private (bool, Vector2I, Sprite2D)[] _selection = new[]
+    {
+        (false, new Vector2I(), null as Sprite2D),
+        (false, new Vector2I(), null as Sprite2D)
+    };
 
     private Array2D<Sprite2D> _sprites;
     private Stack<Sprite2D> _removedSprites = new();
     private Vector2 _dropOrigin;
     private bool _endTurn;
-
-    public override void _Input(InputEvent inputEvent)
+    
+    /// <summary>
+    /// Select a piece based on screen coordinates (e.g mouse click)
+    /// </summary>
+    /// <param name="position">Screen coordinates that should get selected</param>
+    /// <param name="pieceIndex">Index of the selection (0/1)</param>
+    /// <returns>true if a valid selection was made</returns>
+    public bool SelectPiece(Vector2 position)
     {
-        if (inputEvent is InputEventMouseButton mouseEvent && mouseEvent.Pressed)
+        // Convert mouse position to grid position
+        var local = position - Position + new Vector2(Spacing * .5f, Spacing * .5f);
+        if (local.X < 0 || local.Y < 0 || local.X > Width * Spacing || local.Y > Height * Spacing)
         {
-            if (mouseEvent.ButtonIndex == MouseButton.Right)
-            {
-                _selected = null;
-                SelectionSprite1.Visible = false;
-                return;
-            }
-
-            if (mouseEvent.ButtonIndex != MouseButton.Left) return;
-            
-            // Convert mouse position to grid position
-            var local = mouseEvent.Position - Position + new Vector2(Spacing * .5f, Spacing * .5f);
-            if (local.X < 0 || local.Y < 0 || local.X > Width * Spacing || local.Y > Height * Spacing)
-            {
-                return;
-            }
-            var x = (int)Math.Floor(local.X / Spacing);
-            var y = (int)Math.Floor(local.Y / Spacing);
-            
-            if (_selected == null)
-            {
-                _selected = new Vector2I(x, y);
-                SelectionSprite1.Position = new Vector2(x, y) * Spacing;
-                SelectionSprite1.Visible = true;
-            }
-            else
-            {
-                var second = new Vector2I(x, y);
-                var diff = _selected.Value - second;
-                var sum = Math.Abs(diff.X) + Math.Abs(diff.Y);
-                if (sum == 1)
-                {
-                    SelectionSprite2.Position = new Vector2(x, y) * Spacing;
-                    SelectionSprite2.Visible = true;
-                    StartSwap(_selected.Value, new Vector2I(x, y));
-                    _selected = null;
-                }
-            }
-        }            
+            return false;
+        }
+        var x = (int)Math.Floor(local.X / Spacing);
+        var y = (int)Math.Floor(local.Y / Spacing);
+        return SelectPiece(new Vector2I(x, y));
     }
 
+    /// <summary>
+    /// Select a piece based on the integer board coordinates, will
+    /// automatically make the move it both pieces are selected
+    /// </summary>
+    /// <param name="position">Element on the board to be selected</param>
+    /// <param name="pieceIndex">Index of the selection (0/1)</param>
+    /// <returns>true if a valid (in range) selection was made</returns>
+    public bool SelectPiece(Vector2I position)
+    {
+        // While the other version of this call uses this call, we also will
+        // use this from the AI player, this means it needs to check all the ranges 
+        // again
+        if (position.X < 0 || position.Y < 0 || position.X >= Width || position.Y >= Height) return false;
+
+        int pieceIndex = 0;
+        if (_selection[0].Item1) pieceIndex = 1;
+        
+        _selection[pieceIndex].Item1 = true;
+        _selection[pieceIndex].Item2 = position;
+        _selection[pieceIndex].Item3.Visible = true;
+        var pos = new Vector2(_selection[pieceIndex].Item2.X, _selection[pieceIndex].Item2.Y) * Spacing;
+        _selection[pieceIndex].Item3.Position = pos;
+        if (pieceIndex == 1) return MakeMove();
+        else return true;
+    }
+
+    public void ClearSelection(int pieceIndex = -1)
+    {
+        int start = 0;
+        int end = 1;
+        if (pieceIndex >= 0 && pieceIndex < _selection.Length)
+        {
+            start = pieceIndex;
+            end = pieceIndex + 1;
+        }
+        
+        for (int i = start; i < end; i++)
+        {
+            _selection[i].Item1 = false;
+            _selection[i].Item3.Visible = false;
+        }
+    }
+
+    public bool MakeMove()
+    {
+        if (!_selection[0].Item1 || !_selection[1].Item1) return false;
+        return StartSwap(_selection[0].Item2, _selection[1].Item2);
+    }
+    
     public override void _Ready()
     {
         Board = new Board(Width, Height);
         
         SelectionSprite1.Visible = false;
         SelectionSprite2.Visible = false;
+
+        _selection[0].Item3 = SelectionSprite1;
+        _selection[1].Item3 = SelectionSprite2;
 
         _sprites = new Array2D<Sprite2D>(Width, Height);
         _selected = null;
@@ -145,8 +177,7 @@ public partial class BoardNode : Node2D
         mainTween.TweenCallback(Callable.From(AfterBoardUpdate));
     }
 
-    // Performs animations for swap and finalizes board when animations are done
-    public void StartSwap(Vector2I source, Vector2I target)
+    public bool StartSwap(Vector2I source, Vector2I target)
     {
         if (Board.IsValid(source, target))
         {
@@ -155,8 +186,10 @@ public partial class BoardNode : Node2D
             DoSwap(source, target, Callable.From(() =>
                 {
                     EndSwap(source, target);
+                    ClearSelection();
                 }
             ));
+            return true;
         }
         else
         {
@@ -165,8 +198,10 @@ public partial class BoardNode : Node2D
                 {
                     GD.Print($"invalid swap start {source} {target}");
                     DoSwap(source, target, new Callable());
+                    ClearSelection();
                 }
             ));
+            return false;
         }
     }
     
@@ -357,8 +392,7 @@ public partial class BoardNode : Node2D
 
     public void StartAiMove(Vector2I one, Vector2I two)
     {
-        SelectionSprite1.Position = IndexToPosition(one);
-        SelectionSprite2.Position = IndexToPosition(two);
+
         
         var tween = CreateTween();
         tween.TweenProperty(SelectionSprite1,"visible", true, 0.01);

@@ -4,6 +4,11 @@
 			"uuid": "e5e8c6eb-1aad-4f75-a719-9a98c8550dbb",
 			"title": "Task",
 			"color": "70bafa"
+		},
+		{
+			"uuid": "0cb29085-b809-4661-ba04-c6d90b3a49b1",
+			"title": "BUG",
+			"color": "731000"
 		}
 	],
 	"stages": [
@@ -11,16 +16,16 @@
 			"uuid": "e7f12744-f0f5-4dbc-807e-932574d7dffe",
 			"title": "Todo",
 			"tasks": [
+				"e46ca35d-26d2-42bb-ad3c-031d79f992ab",
 				"1b7c911f-824f-4057-822e-c5991f78c950",
-				"180d61f6-7412-4558-9d05-8bcc9c9db03b",
-				"24c1b44f-24b9-48f9-957e-64fa687811eb"
+				"180d61f6-7412-4558-9d05-8bcc9c9db03b"
 			]
 		},
 		{
 			"uuid": "9f77b42b-ca4d-49e0-b316-5e634513abb5",
 			"title": "Doing",
 			"tasks": [
-				"1ddd8d29-6572-487f-824e-03c111208712"
+				"55040f95-47a2-4cfc-a19a-4fffb5a5496f"
 			]
 		},
 		{
@@ -29,22 +34,16 @@
 			"tasks": [
 				"cf049a34-a0b8-41f6-91bd-6204c1ae1e98",
 				"30e912ab-c41b-4b34-aa3c-5ec5edb1646c",
-				"83f0676d-03c2-42f7-8807-df7a2a47bb1d"
+				"83f0676d-03c2-42f7-8807-df7a2a47bb1d",
+				"1ddd8d29-6572-487f-824e-03c111208712"
 			]
 		}
 	],
 	"tasks": [
 		{
-			"uuid": "24c1b44f-24b9-48f9-957e-64fa687811eb",
-			"title": "Move Player Piece selection into Player Object",
-			"description": "",
-			"category": "e5e8c6eb-1aad-4f75-a719-9a98c8550dbb",
-			"steps": []
-		},
-		{
 			"uuid": "1ddd8d29-6572-487f-824e-03c111208712",
-			"title": "Move AI piece selection into AI object",
-			"description": "",
+			"title": "Refactor move selection",
+			"description": "Move AI piece selection into AI object\nMove Player Piece selection into player object\nCurrently not correct ... ",
 			"category": "e5e8c6eb-1aad-4f75-a719-9a98c8550dbb",
 			"steps": []
 		},
@@ -81,6 +80,20 @@
 			"title": "Show spell effect in screen text",
 			"description": "",
 			"category": "e5e8c6eb-1aad-4f75-a719-9a98c8550dbb",
+			"steps": []
+		},
+		{
+			"uuid": "e46ca35d-26d2-42bb-ad3c-031d79f992ab",
+			"title": "Player ignore input events when its not their turn",
+			"description": "",
+			"category": "e5e8c6eb-1aad-4f75-a719-9a98c8550dbb",
+			"steps": []
+		},
+		{
+			"uuid": "55040f95-47a2-4cfc-a19a-4fffb5a5496f",
+			"title": "On Player getting attacked text is on the wrong side",
+			"description": "",
+			"category": "0cb29085-b809-4661-ba04-c6d90b3a49b1",
 			"steps": []
 		}
 	],

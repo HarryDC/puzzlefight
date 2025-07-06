@@ -1,8 +1,28 @@
+using System;
+using System.Diagnostics;
+using Godot;
+
 namespace PuzzleFight.Nodes;
 
 public partial class HumanPlayerNode : Participant
 {
-    // TODO move piece selection for move into here
+    public override void _Input(InputEvent inputEvent)
+    {
+        if (inputEvent is InputEventMouseButton mouseEvent && mouseEvent.Pressed)
+        {
+            if (mouseEvent.ButtonIndex == MouseButton.Right)
+            {
+                BoardNode.ClearSelection();
+                return;
+            }
+
+            if (mouseEvent.ButtonIndex != MouseButton.Left) return;
+            
+            // Convert mouse position to grid position
+            BoardNode.SelectPiece(mouseEvent.Position);
+        }            
+    }
+    
     public override void Setup(BoardNode board)
     {
         BoardNode = board;

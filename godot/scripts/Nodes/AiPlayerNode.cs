@@ -22,9 +22,10 @@ public partial class AiPlayerNode : Participant
         Character.PreMoveUpdate();
         var moves = BoardNode.Board.GetAllMoves();
         var selected = HierarchicalMove(moves, BoardNode.Board);
-        
-        
-        BoardNode.StartAiMove(moves[selected], moves[selected+1]);
+
+        var tween = CreateTween();
+        tween.TweenCallback(Callable.From(() => BoardNode.SelectPiece(moves[selected])));
+        tween.TweenCallback(Callable.From(() => BoardNode.SelectPiece(moves[selected+1]))).SetDelay(0.25);
     }
 
     public override void EndRound()
