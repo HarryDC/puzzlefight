@@ -26,7 +26,7 @@ public partial class TextHandler : Node
                 return new Vector2(_rg.RandfRange(HMargin, (float)(size.X / 2.0) - HMargin),
                     _rg.RandfRange(VMargin, size.Y - VMargin));
             case Position.Right:
-                return new Vector2(_rg.RandfRange(HMargin, (float)(size.X / 2.0) - HMargin),
+                return new Vector2(_rg.RandfRange((float)(size.X / 2.0) + HMargin, (float)(size.X / 2.0) - HMargin),
                     _rg.RandfRange(VMargin, size.Y - VMargin));
             default:
                 return new Vector2(_rg.RandfRange(HMargin, size.X-HMargin),
