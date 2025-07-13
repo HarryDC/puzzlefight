@@ -1,0 +1,32 @@
+[gd_scene load_steps=3 format=3 uid="uid://dlp8jmesjber7"]
+
+[ext_resource type="FontFile" uid="uid://o1ir78c6j6gs" path="res://assets/Fredoka-Regular.ttf" id="1_goto4"]
+[ext_resource type="FontFile" uid="uid://ddhu1od53rwmf" path="res://assets/Fredoka-SemiBold.ttf" id="1_udkyd"]
+
+[node name="Panel" type="Panel"]
+offset_right = 800.0
+offset_bottom = 80.0
+mouse_filter = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer"]
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("1_goto4")
+theme_override_fonts/bold_font = ExtResource("1_udkyd")
+theme_override_font_sizes/normal_font_size = 50
+theme_override_font_sizes/bold_font_size = 50
+text = "This is a test text"
+fit_content = true
+scroll_active = false
+vertical_alignment = 1

@@ -27,3 +27,6 @@ layout_mode = 2
 theme_override_fonts/font = ExtResource("3_62w2o")
 theme_override_font_sizes/font_size = 64
 text = "Healing"
+
+[connection signal="mouse_entered" from="." to="." method="OnMouseEntered"]
+[connection signal="mouse_exited" from="." to="." method="OnMouseExited"]
