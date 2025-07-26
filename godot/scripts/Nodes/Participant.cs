@@ -54,21 +54,6 @@ public abstract partial class Participant : Node
         var textHandler = GetNode<TextHandler>("/root/Game/TextHandler");
         TextDisplay += textHandler.OnEmitText;
     }
-
-    public void Attack(Participant attacker, int damage)
-    {
-        var realDamage = Math.Max(0, damage - Character.Armor);
-        Character.HitPoints -= realDamage;
-        
-        EmitSignal(SignalName.TextDisplay, $"-{realDamage}HP", (int)Position);
-        
-        ScorePanel.UpdateCharacter(Character);
-        
-        if (Character.HitPoints <= 0)
-        {
-            EmitSignal(SignalName.ParticipantDeath);
-        }
-    }
     
     public void DidMatch(List<MatchData> matches)
     {
@@ -97,11 +82,14 @@ public abstract partial class Participant : Node
         
         Character.AddGems(matches);
         
-        var attack = (3.0f / matches.Count) * Character.Attack;
-        
         if (attackCount > 0)
         {
-            Opponent.Attack(this, (int)attack);
+            var result = Character.ExecuteAttack(Opponent.Character, attackCount);
+            if (Opponent.Character.HitPoints <= 0)
+            {
+                EmitSignal(SignalName.ParticipantDeath);
+            }
+            EmitSignal(SignalName.TextDisplay, $"-{result.DamageDealt}HP", (int)Opponent.Position);
         }
     }
 

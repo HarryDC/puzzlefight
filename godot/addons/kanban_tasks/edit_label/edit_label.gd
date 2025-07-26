@@ -59,8 +59,9 @@ func _ready() -> void:
 	__label.size_flags_vertical = SIZE_SHRINK_CENTER
 	__label.mouse_filter = Control.MOUSE_FILTER_PASS
 
-	__label.clip_text = true
-	__label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	__label.clip_text = false
+	__label.autowrap_mode = TextServer.AUTOWRAP_WORD
+	# __label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 
 	__label.gui_input.connect(__on_label_gui_input)
 	add_child(__label)

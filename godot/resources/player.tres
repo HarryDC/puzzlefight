@@ -1,10 +1,12 @@
-[gd_resource type="Resource" script_class="Character" load_steps=6 format=3 uid="uid://dnndpd7os2fr0"]
+[gd_resource type="Resource" script_class="Character" load_steps=8 format=3 uid="uid://dnndpd7os2fr0"]
 
+[ext_resource type="Resource" uid="uid://c3chr16whu3k4" path="res://resources/equipment/dagger.tres" id="1_2nhab"]
+[ext_resource type="Script" uid="uid://dgty0b0h53itm" path="res://scripts/Resources/Equipment/Equipment.cs" id="1_ea776"]
 [ext_resource type="Script" uid="uid://bpvabkd6ra6x0" path="res://scripts/Resources/Character.cs" id="1_rjq7u"]
 [ext_resource type="Script" uid="uid://4pvhoeksvvvp" path="res://scripts/Resources/Spells/Spell.cs" id="1_yl67e"]
-[ext_resource type="Resource" uid="uid://csij3yc4m1m2x" path="res://resources/Spells/healing_spell.tres" id="2_gk4t3"]
-[ext_resource type="Resource" uid="uid://cldf6br7usbwr" path="res://resources/Spells/add_attack_spell.tres" id="3_4boxr"]
-[ext_resource type="Resource" uid="uid://c3fgnb4nq1gie" path="res://resources/Spells/add_armor_spell.tres" id="4_2nhab"]
+[ext_resource type="Resource" uid="uid://csij3yc4m1m2x" path="res://resources/spells/healing_spell.tres" id="3_ea776"]
+[ext_resource type="Resource" uid="uid://cldf6br7usbwr" path="res://resources/spells/add_attack_spell.tres" id="4_rq17w"]
+[ext_resource type="Resource" uid="uid://c3fgnb4nq1gie" path="res://resources/spells/add_armor_spell.tres" id="5_xutmu"]
 
 [resource]
 script = ExtResource("1_rjq7u")
@@ -13,5 +15,9 @@ MaxHitPoints = 100
 Armor = 3
 Attack = 4
 Actions = 1
-Spells = Array[ExtResource("1_yl67e")]([ExtResource("2_gk4t3"), ExtResource("3_4boxr"), ExtResource("4_2nhab")])
+Spells = Array[ExtResource("1_yl67e")]([ExtResource("3_ea776"), ExtResource("4_rq17w"), ExtResource("5_xutmu")])
+Equipment = Array[ExtResource("1_ea776")]([])
+Equipped = Dictionary[int, ExtResource("1_ea776")]({
+0: ExtResource("1_2nhab")
+})
 metadata/_custom_type_script = "uid://bpvabkd6ra6x0"
