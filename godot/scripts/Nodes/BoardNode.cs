@@ -214,6 +214,7 @@ public partial class BoardNode : Node2D
                     GD.Print($"invalid swap start {source} {target}");
                     DoSwap(source, target, new Callable());
                     ClearSelection();
+                    IsAnimating = false;
                 }
             ));
             return false;
