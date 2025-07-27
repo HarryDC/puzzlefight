@@ -24,14 +24,13 @@
 		{
 			"uuid": "9f77b42b-ca4d-49e0-b316-5e634513abb5",
 			"title": "Doing",
-			"tasks": [
-				"f69e0933-6b9f-4b96-8645-73167516b82e"
-			]
+			"tasks": []
 		},
 		{
 			"uuid": "e55ec4a8-bdb1-429d-83ba-555a22b0f3d0",
 			"title": "Done",
 			"tasks": [
+				"f69e0933-6b9f-4b96-8645-73167516b82e",
 				"382e2ed1-ab4b-4ab2-98d7-5cf0998ed52b",
 				"8af13cf4-916f-47ce-8bea-75b5a768374a",
 				"1b7c911f-824f-4057-822e-c5991f78c950",
