@@ -8,11 +8,12 @@
   <ItemGroup>
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
         <PackageReference Include="MSTest.TestFramework" Version="3.0.2" ExcludeAssets="build;analyzers;native" />
-	<PackageReference Include="gdUnit4.api" Version="5.0.0" />
+		<PackageReference Include="gdUnit4.api" Version="5.0.0" />
         <PackageReference Include="gdUnit4.test.adapter" Version="3.0.0" />
         <PackageReference Include="gdUnit4.analyzers" Version="1.0.0">
 		<PrivateAssets>all</PrivateAssets>
-  		<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>	
+  		<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>		
 	</PackageReference>
    </ItemGroup>
+   <Import Project="addons\GodotInk\GodotInk.props" />
 </Project>
