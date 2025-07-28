@@ -16,7 +16,6 @@
 			"uuid": "e7f12744-f0f5-4dbc-807e-932574d7dffe",
 			"title": "Todo",
 			"tasks": [
-				"e5cdb51a-e359-41ac-b8f0-41e69ce0ad56",
 				"180d61f6-7412-4558-9d05-8bcc9c9db03b",
 				"97ea6859-a805-45f3-a26f-220374e0db06"
 			]
@@ -24,12 +23,15 @@
 		{
 			"uuid": "9f77b42b-ca4d-49e0-b316-5e634513abb5",
 			"title": "Doing",
-			"tasks": []
+			"tasks": [
+				"48f5789a-faf5-4e51-9fd2-78fa486149d2"
+			]
 		},
 		{
 			"uuid": "e55ec4a8-bdb1-429d-83ba-555a22b0f3d0",
 			"title": "Done",
 			"tasks": [
+				"e5cdb51a-e359-41ac-b8f0-41e69ce0ad56",
 				"f69e0933-6b9f-4b96-8645-73167516b82e",
 				"382e2ed1-ab4b-4ab2-98d7-5cf0998ed52b",
 				"8af13cf4-916f-47ce-8bea-75b5a768374a",
@@ -133,6 +135,13 @@
 			"title": "After an invalid swap, can't swap anymore",
 			"description": "",
 			"category": "0cb29085-b809-4661-ba04-c6d90b3a49b1",
+			"steps": []
+		},
+		{
+			"uuid": "48f5789a-faf5-4e51-9fd2-78fa486149d2",
+			"title": "Get a first gameloop from start through dialog to encounter",
+			"description": "",
+			"category": "e5e8c6eb-1aad-4f75-a719-9a98c8550dbb",
 			"steps": []
 		}
 	],
