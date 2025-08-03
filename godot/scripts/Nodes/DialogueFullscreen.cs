@@ -4,6 +4,7 @@
 using Godot;
 using System;
 using System.Linq;
+using PuzzleFight.Nodes;
 
 namespace GodotInk;
 
@@ -109,6 +110,8 @@ public partial class DialogueFullscreen : VBoxContainer
 
     private void Encounter(string id)
     {
+        var gameManager = GetNode<GameManager>("/root/GameManager");
+        gameManager.LoadEncounter(id);
         GD.Print("ENCOUNTERED " + id);
     }
     

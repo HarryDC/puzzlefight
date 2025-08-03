@@ -15,6 +15,10 @@ run/main_scene="uid://dvxfom0n1iw03"
 config/features=PackedStringArray("4.4", "C#", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[autoload]
+
+GameManager="*res://scripts/Nodes/GameManager.cs"
+
 [display]
 
 window/size/viewport_width=1920

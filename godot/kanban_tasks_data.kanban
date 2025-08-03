@@ -16,6 +16,9 @@
 			"uuid": "e7f12744-f0f5-4dbc-807e-932574d7dffe",
 			"title": "Todo",
 			"tasks": [
+				"31b6a036-703e-445b-9ffb-c41c986cd312",
+				"1ef7637e-be4f-4358-9dd4-8b66e10dbbb4",
+				"416b7083-618f-482b-8821-5724ce9db018",
 				"180d61f6-7412-4558-9d05-8bcc9c9db03b",
 				"97ea6859-a805-45f3-a26f-220374e0db06"
 			]
@@ -23,14 +26,13 @@
 		{
 			"uuid": "9f77b42b-ca4d-49e0-b316-5e634513abb5",
 			"title": "Doing",
-			"tasks": [
-				"48f5789a-faf5-4e51-9fd2-78fa486149d2"
-			]
+			"tasks": []
 		},
 		{
 			"uuid": "e55ec4a8-bdb1-429d-83ba-555a22b0f3d0",
 			"title": "Done",
 			"tasks": [
+				"48f5789a-faf5-4e51-9fd2-78fa486149d2",
 				"e5cdb51a-e359-41ac-b8f0-41e69ce0ad56",
 				"f69e0933-6b9f-4b96-8645-73167516b82e",
 				"382e2ed1-ab4b-4ab2-98d7-5cf0998ed52b",
@@ -140,6 +142,27 @@
 		{
 			"uuid": "48f5789a-faf5-4e51-9fd2-78fa486149d2",
 			"title": "Get a first gameloop from start through dialog to encounter",
+			"description": "",
+			"category": "e5e8c6eb-1aad-4f75-a719-9a98c8550dbb",
+			"steps": []
+		},
+		{
+			"uuid": "31b6a036-703e-445b-9ffb-c41c986cd312",
+			"title": "Load Opponent from GameManager",
+			"description": "",
+			"category": "e5e8c6eb-1aad-4f75-a719-9a98c8550dbb",
+			"steps": []
+		},
+		{
+			"uuid": "416b7083-618f-482b-8821-5724ce9db018",
+			"title": "Restore Story Text after Encounter",
+			"description": "",
+			"category": "e5e8c6eb-1aad-4f75-a719-9a98c8550dbb",
+			"steps": []
+		},
+		{
+			"uuid": "1ef7637e-be4f-4358-9dd4-8b66e10dbbb4",
+			"title": "Return encounter result to story",
 			"description": "",
 			"category": "e5e8c6eb-1aad-4f75-a719-9a98c8550dbb",
 			"steps": []

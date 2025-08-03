@@ -20,6 +20,7 @@ You sit {table > 1: back } down at an empty table.
 
 = at_table
 
+    * [Test Encounter] -> encounter_innkeeper
     * [Talk to the innkeeper] 
         You walk up to the bar for a chat with the innkeeper 
         ->innkeeper
