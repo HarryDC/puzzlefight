@@ -11,7 +11,7 @@ EXTERNAL Encounter(id)
 
 
 === pub ===
-Your travels have brought you to an inn in the town of Beeston, most known for the old 13th century castle. The inn is bustling for a wednesday afternoon and e few villager are playing a card game that has them entertained.
+Some travels have brought you to an inn in the town of Beeston, most known for the old 13th century castle. The inn is bustling for a wednesday afternoon and e few villager are playing a card game that has them entertained.
     -> table
 = table
 You sit {table > 1: back } down at an empty table. 
@@ -39,9 +39,12 @@ You sit {table > 1: back } down at an empty table.
     * {directions} [Head for the house] -> outside
 
 = encounter_innkeeper
-    ~ Encounter("innkeeper")
-    * [Defeat] -> at_table
-    * [Victory] -> at_table
+    You and the innkeeper are fighting over control of the knife.
+    ~ Encounter("beeston_innkeeper")
+    * [Defeat] 
+        The innkeeper wrest control of the knife from you and puts it back onto the table. -> at_table
+    * [Victory] 
+        You take the knife and put it in your bag. -> at_table
 
 = innkeeper
 The innkeeper looks at you like the foreigner that you are and nods in the direction of an open table indicating that you should sit. 
@@ -71,10 +74,13 @@ After a short walk you walk up to a large somewhat disheveled house. A rusty iro
     * (open_gate) [Open Gate] 
         You try to open the gate but while it rattles a bit it won't budge. You notice an old fashion bell that is attached to the side of the gate.
         -> house_front_gate
-    * {open_gate} [Ring Bell]
-        The bell makes a very broken sound and at first nothing happens but after a pause of a few seconds suddenly the bell grows to human size and plants itself right in front of you. It's ready for a tussle. 
-            -> END
+    * {open_gate} [Push Harder]
+        You decide to push a little bit harder and after a small struggle whatever was jammed gives in and you can open the gate. As soon as you cross the line of the garden fence you hear something stir in the back of the garden and you see a large crow rising up. The crow squawks a couple of times and then flies directly towards you
+            -> encounter_crow
     * [Walk around the house]
         You spend some time looking around the house but there is a thick thorny hedge surrounding it and you really don't want to break any of the widnows.
         -> house_front_gate
-        
+= encounter_crow
+    ~ Encounter("large_crow")
+    -> DONE
+    

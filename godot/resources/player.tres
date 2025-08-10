@@ -16,7 +16,7 @@ Armor = 3
 Attack = 4
 Actions = 1
 Spells = Array[ExtResource("1_yl67e")]([ExtResource("3_ea776"), ExtResource("4_rq17w"), ExtResource("5_xutmu")])
-Equipment = []
+Equipment = Array[ExtResource("1_ea776")]([])
 Equipped = Dictionary[int, ExtResource("1_ea776")]({
 0: ExtResource("1_2nhab")
 })

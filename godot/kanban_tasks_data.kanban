@@ -17,103 +17,33 @@
 			"title": "Todo",
 			"tasks": [
 				"31b6a036-703e-445b-9ffb-c41c986cd312",
-				"1ef7637e-be4f-4358-9dd4-8b66e10dbbb4",
-				"416b7083-618f-482b-8821-5724ce9db018",
 				"180d61f6-7412-4558-9d05-8bcc9c9db03b",
-				"97ea6859-a805-45f3-a26f-220374e0db06"
+				"97ea6859-a805-45f3-a26f-220374e0db06",
+				"f111f9b9-ce83-49f0-b8c0-98481b86c8b9"
 			]
 		},
 		{
 			"uuid": "9f77b42b-ca4d-49e0-b316-5e634513abb5",
 			"title": "Doing",
-			"tasks": []
+			"tasks": [
+				"2be51f3b-38d1-406e-b2c5-880a6a44e3cb"
+			]
 		},
 		{
 			"uuid": "e55ec4a8-bdb1-429d-83ba-555a22b0f3d0",
 			"title": "Done",
 			"tasks": [
+				"416b7083-618f-482b-8821-5724ce9db018",
+				"1ef7637e-be4f-4358-9dd4-8b66e10dbbb4",
 				"48f5789a-faf5-4e51-9fd2-78fa486149d2",
-				"e5cdb51a-e359-41ac-b8f0-41e69ce0ad56",
-				"f69e0933-6b9f-4b96-8645-73167516b82e",
-				"382e2ed1-ab4b-4ab2-98d7-5cf0998ed52b",
-				"8af13cf4-916f-47ce-8bea-75b5a768374a",
-				"1b7c911f-824f-4057-822e-c5991f78c950",
-				"cf049a34-a0b8-41f6-91bd-6204c1ae1e98",
-				"30e912ab-c41b-4b34-aa3c-5ec5edb1646c",
-				"83f0676d-03c2-42f7-8807-df7a2a47bb1d",
-				"1ddd8d29-6572-487f-824e-03c111208712",
-				"55040f95-47a2-4cfc-a19a-4fffb5a5496f",
-				"e46ca35d-26d2-42bb-ad3c-031d79f992ab"
+				"e5cdb51a-e359-41ac-b8f0-41e69ce0ad56"
 			]
 		}
 	],
 	"tasks": [
 		{
-			"uuid": "1ddd8d29-6572-487f-824e-03c111208712",
-			"title": "Refactor move selection",
-			"description": "Move AI piece selection into AI object\nMove Player Piece selection into player object\nCurrently not correct ... ",
-			"category": "e5e8c6eb-1aad-4f75-a719-9a98c8550dbb",
-			"steps": []
-		},
-		{
-			"uuid": "1b7c911f-824f-4057-822e-c5991f78c950",
-			"title": "Popup Spell Description",
-			"description": "",
-			"category": "e5e8c6eb-1aad-4f75-a719-9a98c8550dbb",
-			"steps": []
-		},
-		{
-			"uuid": "83f0676d-03c2-42f7-8807-df7a2a47bb1d",
-			"title": "Introduce Actions (a move or one spell is an action)",
-			"description": "",
-			"category": "e5e8c6eb-1aad-4f75-a719-9a98c8550dbb",
-			"steps": []
-		},
-		{
 			"uuid": "180d61f6-7412-4558-9d05-8bcc9c9db03b",
 			"title": "Level up spells",
-			"description": "",
-			"category": "e5e8c6eb-1aad-4f75-a719-9a98c8550dbb",
-			"steps": []
-		},
-		{
-			"uuid": "30e912ab-c41b-4b34-aa3c-5ec5edb1646c",
-			"title": "Shop Damage text on the correct side of the screen",
-			"description": "",
-			"category": "e5e8c6eb-1aad-4f75-a719-9a98c8550dbb",
-			"steps": []
-		},
-		{
-			"uuid": "cf049a34-a0b8-41f6-91bd-6204c1ae1e98",
-			"title": "Show spell effect in screen text",
-			"description": "",
-			"category": "e5e8c6eb-1aad-4f75-a719-9a98c8550dbb",
-			"steps": []
-		},
-		{
-			"uuid": "e46ca35d-26d2-42bb-ad3c-031d79f992ab",
-			"title": "Player ignore input events when its not their turn",
-			"description": "- Player should not be able to make a move while it's not theeir turn or even during their turn when the animation is still running \n- Spell buttons should not be active in this case either",
-			"category": "e5e8c6eb-1aad-4f75-a719-9a98c8550dbb",
-			"steps": []
-		},
-		{
-			"uuid": "55040f95-47a2-4cfc-a19a-4fffb5a5496f",
-			"title": "On Player getting attacked text is on the wrong side",
-			"description": "",
-			"category": "0cb29085-b809-4661-ba04-c6d90b3a49b1",
-			"steps": []
-		},
-		{
-			"uuid": "8af13cf4-916f-47ce-8bea-75b5a768374a",
-			"title": "Add Weapons",
-			"description": "",
-			"category": "e5e8c6eb-1aad-4f75-a719-9a98c8550dbb",
-			"steps": []
-		},
-		{
-			"uuid": "382e2ed1-ab4b-4ab2-98d7-5cf0998ed52b",
-			"title": "Add Armor",
 			"description": "",
 			"category": "e5e8c6eb-1aad-4f75-a719-9a98c8550dbb",
 			"steps": []
@@ -130,13 +60,6 @@
 			"title": "Integrate GodotInk",
 			"description": "",
 			"category": "e5e8c6eb-1aad-4f75-a719-9a98c8550dbb",
-			"steps": []
-		},
-		{
-			"uuid": "f69e0933-6b9f-4b96-8645-73167516b82e",
-			"title": "After an invalid swap, can't swap anymore",
-			"description": "",
-			"category": "0cb29085-b809-4661-ba04-c6d90b3a49b1",
 			"steps": []
 		},
 		{
@@ -163,6 +86,20 @@
 		{
 			"uuid": "1ef7637e-be4f-4358-9dd4-8b66e10dbbb4",
 			"title": "Return encounter result to story",
+			"description": "",
+			"category": "e5e8c6eb-1aad-4f75-a719-9a98c8550dbb",
+			"steps": []
+		},
+		{
+			"uuid": "2be51f3b-38d1-406e-b2c5-880a6a44e3cb",
+			"title": "Add knife to the player inventory and equip",
+			"description": "",
+			"category": "e5e8c6eb-1aad-4f75-a719-9a98c8550dbb",
+			"steps": []
+		},
+		{
+			"uuid": "f111f9b9-ce83-49f0-b8c0-98481b86c8b9",
+			"title": "Delete old save files",
 			"description": "",
 			"category": "e5e8c6eb-1aad-4f75-a719-9a98c8550dbb",
 			"steps": []

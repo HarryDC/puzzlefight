@@ -1,15 +1,16 @@
 using Godot;
 using System;
+using PuzzleFight.Nodes;
 
 public partial class Game : Node
 {
     void OnPlayerDeath()
     {
-        GetTree().ChangeSceneToFile("res://scenes/main_menu.tscn");
+        GameManager.Instance.Defeat();
     }
 
     void OnOpponentDeath()
     {
-        GetTree().ChangeSceneToFile("res://scenes/main_menu.tscn");
+        GameManager.Instance.Victory();
     }
 }

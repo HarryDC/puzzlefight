@@ -8,7 +8,7 @@ using PuzzleFight.Nodes;
 
 namespace GodotInk;
 
-public partial class DialogueFullscreen : VBoxContainer
+public partial class DialogFullscreen : VBoxContainer
 {
     
     private static readonly StringName CHOICE_INDEX_META = "Index";
@@ -30,6 +30,8 @@ public partial class DialogueFullscreen : VBoxContainer
     private bool storyStarted;
 
     private string backupSave = "";
+
+    private string? _nextEncounter;
 
     public override void _Ready()
     {
@@ -72,9 +74,53 @@ public partial class DialogueFullscreen : VBoxContainer
         stopButton.Icon = GetThemeIcon("Stop", "EditorIcons");
         clearButton.Icon = GetThemeIcon("Clear", "EditorIcons");
 
-        LoadStory("res://assets/ink/TheStandishHouse.ink");
-        // Update UI.
+        story = GameManager.Instance.Story;
+        story.BindExternalFunction("Encounter", Callable.From<string>(Encounter), true);
+        
+        RestoreNodeState(GameManager.Instance.GameGuid.ToString());
+        
         UpdateTop();
+    }
+
+    private void RestoreNodeState(string guid)
+    {
+        string scenePath = $"user://{guid}-story.tscn";
+        if (ResourceLoader.Exists(scenePath))
+        {
+            var packedScene = GD.Load<PackedScene>(scenePath);
+
+            var node = packedScene.Instantiate() as VBoxContainer;
+
+            if (node != null)
+            {
+                BuildChoices();
+                var parent = storyText.GetParent();
+                parent.RemoveChild(storyText);
+                storyText.QueueFree();
+                storyText = node;
+                parent.AddChild(storyText);
+                storyStarted = true;
+                ContinueStory();
+                if (GameManager.Instance.LastResult != "")
+                {
+                    FindAndExecute(GameManager.Instance.LastResult);
+                }
+                ContinueStory();
+            }
+        }
+    }
+
+  
+    private void StoreNodeState(string guid)
+    {
+        string scenePath = $"user://{guid}-story.tscn";
+        var packedScene = new PackedScene();
+        packedScene.Pack(storyText);
+        var error = ResourceSaver.Save(packedScene, scenePath);
+        if (error != Error.Ok)
+        {
+            GD.PrintErr(error.ToString());
+        }
     }
 
     private void UpdateTop()
@@ -91,28 +137,9 @@ public partial class DialogueFullscreen : VBoxContainer
         storyChoices.GetParent<Control>().Visible = hasStory;
     }
 
-    private void LoadStory(string path)
-    {
-        try
-        {
-            storyPath = path;
-            story = ResourceLoader.Load<InkStory>(path, null, ResourceLoader.CacheMode.Ignore);
-            // And bind some functions.
-            story.BindExternalFunction("Encounter", Callable.From<string>(Encounter));
-            UpdateTop();
-        }
-        catch (InvalidCastException)
-        {
-            GD.PrintErr($"{path} is not a valid ink story. "
-                       + "Please make sure it was imported with `is_main_file` set to `true`.");
-        }
-    }
-
     private void Encounter(string id)
     {
-        var gameManager = GetNode<GameManager>("/root/GameManager");
-        gameManager.LoadEncounter(id);
-        GD.Print("ENCOUNTERED " + id);
+        _nextEncounter = id;
     }
     
     private void StartStory()
@@ -187,6 +214,21 @@ public partial class DialogueFullscreen : VBoxContainer
             }
         }
 
+        BuildChoices();
+
+        backupSave = storyStarted ? story.SaveState() : "";
+
+        if (_nextEncounter != null)
+        {
+            StoreNodeState(GameManager.Instance.GameGuid.ToString());
+            story.UnbindExternalFunction("Encounter");
+            GameManager.Instance.LoadEncounter(_nextEncounter);
+            _nextEncounter = null;
+        }
+    }
+
+    private void BuildChoices()
+    {
         foreach (InkChoice choice in story.CurrentChoices)
         {
             Button button = new() { Text = choice.Text };
@@ -196,9 +238,20 @@ public partial class DialogueFullscreen : VBoxContainer
 
             storyChoices.AddChild(button);
         }
-
-        backupSave = storyStarted ? story.SaveState() : "";
     }
+    
+    private void FindAndExecute(string choiceText)
+    {
+        // TODO maybe should use tags here rather than text (safer with internationalization)
+        foreach (InkChoice choice in story.CurrentChoices)
+        {
+            if (choiceText == choice.Text)
+            {
+                ClickChoice(choice.Index);
+            }
+        }        
+    }
+
 
     private void ClickChoice()
     {
@@ -235,11 +288,12 @@ public partial class DialogueFullscreen : VBoxContainer
         ContinueStory();
     }
 
-    private async void AddToStory(CanvasItem item)
+    private void AddToStory(CanvasItem item)
     {
         storyText.AddChild(item);
-        await ToSignal(GetTree(), "process_frame");
-        await ToSignal(GetTree(), "process_frame");
+        item.Owner = storyText;
+        // await ToSignal(GetTree(), "process_frame");
+        // await ToSignal(GetTree(), "process_frame");
         scroll.ScrollVertical = (int)scroll.GetVScrollBar().MaxValue;
     }
 

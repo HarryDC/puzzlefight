@@ -1,6 +1,6 @@
-[gd_scene load_steps=11 format=3 uid="uid://ccihvs0cekjs3"]
+[gd_scene load_steps=11 format=3 uid="uid://dbisoa5idwnks"]
 
-[ext_resource type="Script" uid="uid://iv73gm6w1gax" path="res://scripts/Nodes/DialogueFullscreen.cs" id="1_atcpn"]
+[ext_resource type="Script" uid="uid://iv73gm6w1gax" path="res://scripts/Nodes/DialogFullscreen.cs" id="1_u0dfe"]
 
 [sub_resource type="Theme" id="Theme_atcpn"]
 default_font_size = 48
@@ -53,7 +53,7 @@ data = {
 [sub_resource type="ImageTexture" id="ImageTexture_sdeiv"]
 image = SubResource("Image_v1r74")
 
-[node name="DialogueFullscreen" type="VBoxContainer"]
+[node name="DialogFullscreen" type="VBoxContainer"]
 custom_minimum_size = Vector2(0, 228)
 anchors_preset = 15
 anchor_right = 1.0
@@ -63,7 +63,7 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = SubResource("Theme_atcpn")
-script = ExtResource("1_atcpn")
+script = ExtResource("1_u0dfe")
 
 [node name="Container" type="HSplitContainer" parent="."]
 layout_mode = 2

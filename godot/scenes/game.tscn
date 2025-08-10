@@ -39,33 +39,77 @@ texture = ExtResource("2_gee14")
 script = ExtResource("3_0tnpc")
 Character = ExtResource("4_vtaks")
 Opponent = NodePath("../Player")
-ScorePanel = NodePath("../OpponentPanel")
+ScorePanel = NodePath("../Control/OpponentPanel")
 Position = 2
 
-[node name="OpponentPanel" parent="." node_paths=PackedStringArray("Participant") instance=ExtResource("5_kvpfn")]
+[node name="Player" type="Node" parent="." node_paths=PackedStringArray("Opponent", "ScorePanel")]
+script = ExtResource("6_dinhu")
+Character = ExtResource("7_kvuet")
+Opponent = NodePath("../Opponent")
+ScorePanel = NodePath("../Control/PlayerPanel")
+Position = 1
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="PlayerPanel" parent="Control" node_paths=PackedStringArray("Participant") instance=ExtResource("5_kvpfn")]
+layout_mode = 0
+offset_left = -2.0
+offset_top = 2.0
+offset_right = 456.0
+offset_bottom = 550.0
+Participant = NodePath("../../Player")
+
+[node name="OpponentPanel" parent="Control" node_paths=PackedStringArray("Participant") instance=ExtResource("5_kvpfn")]
+layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -458.0
 offset_top = 0.0
 offset_right = 0.0
-offset_bottom = 461.0
+offset_bottom = 548.0
 grow_horizontal = 0
-Participant = NodePath("../Opponent")
+Participant = NodePath("../../Opponent")
 
-[node name="Player" type="Node" parent="." node_paths=PackedStringArray("Opponent", "ScorePanel")]
-script = ExtResource("6_dinhu")
-Character = ExtResource("7_kvuet")
-Opponent = NodePath("../Opponent")
-ScorePanel = NodePath("../PlayerPanel")
-Position = 1
+[node name="VictoryButton" type="Button" parent="Control"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -364.0
+offset_top = -134.0
+offset_right = -7.0
+offset_bottom = -6.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 64
+text = "Victory"
 
-[node name="PlayerPanel" parent="." node_paths=PackedStringArray("Participant") instance=ExtResource("5_kvpfn")]
-offset_left = -2.0
-offset_top = 2.0
-offset_right = 456.0
-offset_bottom = 484.0
-Participant = NodePath("../Player")
+[node name="DefeatButton" type="Button" parent="Control"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -750.0
+offset_top = -131.0
+offset_right = -393.0
+offset_bottom = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 64
+text = "Defeat"
 
 [connection signal="ParticipantDeath" from="Opponent" to="." method="OnOpponentDeath"]
 [connection signal="ParticipantDeath" from="Player" to="." method="OnPlayerDeath"]
+[connection signal="button_down" from="Control/VictoryButton" to="." method="OnOpponentDeath"]
+[connection signal="button_down" from="Control/DefeatButton" to="." method="OnPlayerDeath"]
