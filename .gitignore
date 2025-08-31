@@ -1,5 +1,6 @@
 # Godot 4+ specific ignores
 .godot/
 /android/
+/export/
 gdunit4_testadapter_v5/
 .DS_Store

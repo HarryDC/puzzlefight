@@ -16,24 +16,25 @@
 			"uuid": "e7f12744-f0f5-4dbc-807e-932574d7dffe",
 			"title": "Todo",
 			"tasks": [
-				"31b6a036-703e-445b-9ffb-c41c986cd312",
 				"180d61f6-7412-4558-9d05-8bcc9c9db03b",
 				"97ea6859-a805-45f3-a26f-220374e0db06",
 				"f111f9b9-ce83-49f0-b8c0-98481b86c8b9",
-				"2be51f3b-38d1-406e-b2c5-880a6a44e3cb"
+				"2be51f3b-38d1-406e-b2c5-880a6a44e3cb",
+				"d8176eed-27de-404b-bcb6-08015ecdec54"
 			]
 		},
 		{
 			"uuid": "9f77b42b-ca4d-49e0-b316-5e634513abb5",
 			"title": "Doing",
 			"tasks": [
-				"d8176eed-27de-404b-bcb6-08015ecdec54"
+				"b22ff07a-dbd3-4b9a-a9c0-91410d319f7c"
 			]
 		},
 		{
 			"uuid": "e55ec4a8-bdb1-429d-83ba-555a22b0f3d0",
 			"title": "Done",
 			"tasks": [
+				"31b6a036-703e-445b-9ffb-c41c986cd312",
 				"416b7083-618f-482b-8821-5724ce9db018",
 				"1ef7637e-be4f-4358-9dd4-8b66e10dbbb4",
 				"48f5789a-faf5-4e51-9fd2-78fa486149d2",
@@ -118,6 +119,13 @@
 			"title": "Story needs to scroll to the bottom ",
 			"description": "",
 			"category": "0cb29085-b809-4661-ba04-c6d90b3a49b1",
+			"steps": []
+		},
+		{
+			"uuid": "b22ff07a-dbd3-4b9a-a9c0-91410d319f7c",
+			"title": "Show Player/Opponent Name ",
+			"description": "",
+			"category": "e5e8c6eb-1aad-4f75-a719-9a98c8550dbb",
 			"steps": []
 		}
 	],
