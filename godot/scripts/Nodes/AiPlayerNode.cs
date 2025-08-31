@@ -9,6 +9,8 @@ public partial class AiPlayerNode : Participant
 {
     public override void Setup(BoardNode boardNode)
     {
+        Character = GameManager.Instance.Opponent;
+        if (Character == null) GD.PrintErr("Character is NULL in AiPlayerNode");
         BoardNode = boardNode;
         Actions = Character.Actions;
     }

@@ -2,13 +2,17 @@
 // External functions
 // Run an encounter with the character of the given id
 EXTERNAL Encounter(id)
+// Give the player character an item
+EXTERNAL Gain(id)
 
 
 
 // Placeholder functions for EXTERNAL 
 === function Encounter(x) ===
-~ return 1
+~ return "The player encountered " + x
 
+=== function Gain(x) ===
+~ return "The player gained " + x
 
 === pub ===
 Some travels have brought you to an inn in the town of Beeston, most known for the old 13th century castle. The inn is bustling for a wednesday afternoon and e few villager are playing a card game that has them entertained.
@@ -21,7 +25,7 @@ You sit {table > 1: back } down at an empty table.
 = at_table
 
     * [Test Encounter] -> encounter_innkeeper
-    * [Talk to the innkeeper] 
+    + [Talk to the innkeeper] 
         You walk up to the bar for a chat with the innkeeper 
         ->innkeeper
     * [Observe the card game] -> cards
@@ -41,10 +45,12 @@ You sit {table > 1: back } down at an empty table.
 = encounter_innkeeper
     You and the innkeeper are fighting over control of the knife.
     ~ Encounter("beeston_innkeeper")
-    * [Defeat] 
-        The innkeeper wrest control of the knife from you and puts it back onto the table. -> at_table
-    * [Victory] 
-        You take the knife and put it in your bag. -> at_table
+    + [Defeat] 
+        The innkeeper wrests control of the knife from you and puts it back onto the table. -> at_table
+    + [Victory] 
+        You take the knife and put it in your bag. 
+        ~Gain("beeston_knife")
+        -> at_table
 
 = innkeeper
 The innkeeper looks at you like the foreigner that you are and nods in the direction of an open table indicating that you should sit. 

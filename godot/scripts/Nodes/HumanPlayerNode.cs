@@ -31,6 +31,8 @@ public partial class HumanPlayerNode : Participant
     public override void Setup(BoardNode board)
     {
         BoardNode = board;
+        Character = GameManager.Instance.PlayerCharacter;
+        if (Character == null) GD.PrintErr("Character is NULL in HumanPlayerNode");
         Actions = Character.Actions;
     }
 

@@ -11,102 +11,68 @@ namespace GodotInk;
 public partial class DialogFullscreen : VBoxContainer
 {
     
-    private static readonly StringName CHOICE_INDEX_META = "Index";
+    private static readonly StringName ChoiceIndexMeta = "Index";
+    
+    private Label _storyNameLabel = null!;
+    private VBoxContainer _storyText = null!;
+    private VBoxContainer _storyChoices = null!;
+    private ScrollContainer _scroll = null!;
+    
+    private string _storyPath = "";
+    private InkStory? _story;
+    private bool _storyStarted;
 
-    private Button loadButton = null!;
-    private Button startButton = null!;
-    private Button stopButton = null!;
-    private Button clearButton = null!;
-
-    private Label storyNameLabel = null!;
-    private VBoxContainer storyText = null!;
-    private VBoxContainer storyChoices = null!;
-    private ScrollContainer scroll = null!;
-
-    private EditorFileDialog fileDialog = null!;
-
-    private string storyPath = "";
-    private InkStory? story;
-    private bool storyStarted;
-
-    private string backupSave = "";
-
-    private string? _nextEncounter;
+    private string _backupSave = "";
 
     public override void _Ready()
     {
         base._Ready();
 
         CustomMinimumSize = new Vector2(0.0f, 228.0f);
-
-        // // Initialize file dialog.
-        // fileDialog = new()
-        // {
-        //     FileMode = EditorFileDialog.FileModeEnum.OpenFile,
-        //     Access = EditorFileDialog.AccessEnum.Resources,
-        // };
-        // fileDialog.AddFilter("*.ink", "Ink Stories");
-        // fileDialog.FileSelected += LoadStory;
-        //
-        // AddChild(fileDialog);
-
-        // Initialize top.
-        loadButton = GetNode<Button>("Container/Left/Top/LoadButton");
-        storyNameLabel = GetNode<Label>("Container/Left/Top/Label");
-        startButton = GetNode<Button>("Container/Left/Top/StartButton");
-        stopButton = GetNode<Button>("Container/Left/Top/StopButton");
-        clearButton = GetNode<Button>("Container/Left/Top/ClearButton");
-
-        // Connect UI events.
-        // loadButton.Pressed += () => fileDialog.PopupCenteredClamped(new Vector2I(1050, 700), 0.8f);
-        startButton.Pressed += StartStory;
-        stopButton.Pressed += StopStory;
-        clearButton.Pressed += () => ClearStory(false);
-
-        // Initialize bottom.
-        storyText = GetNode<VBoxContainer>("Container/Left/Scroll/Margin/StoryText");
-        storyChoices = GetNode<VBoxContainer>("Container/Right/StoryChoices");
-        scroll = GetNode<ScrollContainer>("Container/Left/Scroll");
-
-        // Set icons.
-        // loadButton.Icon = GetThemeIcon("Load", "EditorIcons");
-        startButton.Icon = GetThemeIcon("Play", "EditorIcons");
-        stopButton.Icon = GetThemeIcon("Stop", "EditorIcons");
-        clearButton.Icon = GetThemeIcon("Clear", "EditorIcons");
-
-        story = GameManager.Instance.Story;
-        story.BindExternalFunction("Encounter", Callable.From<string>(Encounter), true);
         
+        _storyNameLabel = GetNode<Label>("Container/Left/Top/Label");
+        // Initialize bottom.
+        _storyText = GetNode<VBoxContainer>("Container/Left/Scroll/Margin/StoryText");
+        _storyChoices = GetNode<VBoxContainer>("Container/Right/StoryChoices");
+        _scroll = GetNode<ScrollContainer>("Container/Left/Scroll");
+
+        _story = GameManager.Instance.Story;
+ 
         RestoreNodeState(GameManager.Instance.GameGuid.ToString());
         
         UpdateTop();
     }
-
+    
     private void RestoreNodeState(string guid)
     {
         string scenePath = $"user://{guid}-story.tscn";
         if (ResourceLoader.Exists(scenePath))
         {
-            var packedScene = GD.Load<PackedScene>(scenePath);
+            var packedScene = ResourceLoader.Load<PackedScene>(scenePath, null, ResourceLoader.CacheMode.IgnoreDeep);
 
             var node = packedScene.Instantiate() as VBoxContainer;
 
             if (node != null)
             {
                 BuildChoices();
-                var parent = storyText.GetParent();
-                parent.RemoveChild(storyText);
-                storyText.QueueFree();
-                storyText = node;
-                parent.AddChild(storyText);
-                storyStarted = true;
+                var parent = _storyText.GetParent();
+                parent.RemoveChild(_storyText);
+                _storyText.QueueFree();
+                _storyText = node;
+                parent.AddChild(_storyText);
+                _storyStarted = true;
                 ContinueStory();
                 if (GameManager.Instance.LastResult != "")
                 {
                     FindAndExecute(GameManager.Instance.LastResult);
                 }
+                _scroll.ScrollVertical = (int)_scroll.GetVScrollBar().MaxValue;
                 ContinueStory();
             }
+        }
+        else
+        {
+            StartStory();
         }
     }
 
@@ -115,7 +81,7 @@ public partial class DialogFullscreen : VBoxContainer
     {
         string scenePath = $"user://{guid}-story.tscn";
         var packedScene = new PackedScene();
-        packedScene.Pack(storyText);
+        packedScene.Pack(_storyText);
         var error = ResourceSaver.Save(packedScene, scenePath);
         if (error != Error.Ok)
         {
@@ -125,30 +91,16 @@ public partial class DialogFullscreen : VBoxContainer
 
     private void UpdateTop()
     {
-        bool hasStory = story != null;
-
-        storyNameLabel.Text = hasStory ? storyPath : string.Empty;
-
-        startButton.Visible = hasStory && !storyStarted;
-        stopButton.Visible = hasStory && storyStarted;
-        clearButton.Visible = hasStory;
-        clearButton.Disabled = storyText.GetChildCount() <= 0;
-
-        storyChoices.GetParent<Control>().Visible = hasStory;
-    }
-
-    private void Encounter(string id)
-    {
-        _nextEncounter = id;
+        bool hasStory = _story != null;
+        _storyChoices.GetParent<Control>().Visible = hasStory;
     }
     
     private void StartStory()
     {
-        if (story == null) return;
+        if (_story == null) return;
 
-        storyStarted = true;
+        _storyStarted = true;
         ContinueStory();
-
         UpdateTop();
     }
 
@@ -159,19 +111,19 @@ public partial class DialogFullscreen : VBoxContainer
 
     private void StopStory(bool setStoryToNull)
     {
-        storyStarted = false;
+        _storyStarted = false;
 
         try
         {
-            story?.ResetState();
+            _story?.ResetState();
         }
         catch (ObjectDisposedException)
         {
-            story = null;
+            _story = null;
         }
 
         if (setStoryToNull)
-            story = null;
+            _story = null;
 
         ClearStory(true);
     }
@@ -187,10 +139,10 @@ public partial class DialogFullscreen : VBoxContainer
 
     private void ContinueStory()
     {
-        if (story == null) return;
-        if (!story.CanContinue) return;
+        if (_story == null) return;
+        if (!_story.CanContinue) return;
 
-        string currentText = story.ContinueMaximally().Trim();
+        string currentText = _story.ContinueMaximally().Trim();
 
         if (currentText.Length > 0)
         {
@@ -201,13 +153,13 @@ public partial class DialogFullscreen : VBoxContainer
             };
             AddToStory(newLine);
 
-            if (story.CurrentTags.Count > 0)
+            if (_story.CurrentTags.Count > 0)
             {
                 newLine = new Label()
                 {
                     AutowrapMode = TextServer.AutowrapMode.WordSmart,
                     HorizontalAlignment = HorizontalAlignment.Center,
-                    Text = $"# {string.Join(", ", story.CurrentTags)}",
+                    Text = $"# {string.Join(", ", _story.CurrentTags)}",
                 };
                 newLine.AddThemeColorOverride("font_color", GetThemeColor("font_color_disabled", "Button"));
                 AddToStory(newLine);
@@ -215,35 +167,33 @@ public partial class DialogFullscreen : VBoxContainer
         }
 
         BuildChoices();
+        _backupSave = _storyStarted ? _story.SaveState() : "";
 
-        backupSave = storyStarted ? story.SaveState() : "";
-
-        if (_nextEncounter != null)
+        if (GameManager.Instance.HasEncounter())
         {
+            GameManager.Instance.EncounterText = currentText;
             StoreNodeState(GameManager.Instance.GameGuid.ToString());
-            story.UnbindExternalFunction("Encounter");
-            GameManager.Instance.LoadEncounter(_nextEncounter);
-            _nextEncounter = null;
+            GameManager.Instance.DoEncounter();
         }
     }
-
+    
     private void BuildChoices()
     {
-        foreach (InkChoice choice in story.CurrentChoices)
+        foreach (InkChoice choice in _story.CurrentChoices)
         {
             Button button = new() { Text = choice.Text };
-            button.SetMeta(CHOICE_INDEX_META, choice.Index);
+            button.SetMeta(ChoiceIndexMeta, choice.Index);
 
             button.Connect(Button.SignalName.Pressed, Callable.From(ClickChoice));
 
-            storyChoices.AddChild(button);
+            _storyChoices.AddChild(button);
         }
     }
     
     private void FindAndExecute(string choiceText)
     {
         // TODO maybe should use tags here rather than text (safer with internationalization)
-        foreach (InkChoice choice in story.CurrentChoices)
+        foreach (InkChoice choice in _story.CurrentChoices)
         {
             if (choiceText == choice.Text)
             {
@@ -255,19 +205,19 @@ public partial class DialogFullscreen : VBoxContainer
 
     private void ClickChoice()
     {
-        if (storyChoices.GetChildren().OfType<Button>().First(button => button.ButtonPressed) is not Button button) return;
-        if (!button.HasMeta(CHOICE_INDEX_META)) return;
+        if (_storyChoices.GetChildren().OfType<Button>().First(button => button.ButtonPressed) is not Button button) return;
+        if (!button.HasMeta(ChoiceIndexMeta)) return;
 
         try
         {
-            ClickChoice(button.GetMeta(CHOICE_INDEX_META).As<int>());
+            ClickChoice(button.GetMeta(ChoiceIndexMeta).As<int>());
         }
         catch
         {
-            story?.LoadState(backupSave);
+            _story?.LoadState(_backupSave);
             try
             {
-                ClickChoice(button.GetMeta(CHOICE_INDEX_META).As<int>());
+                ClickChoice(button.GetMeta(ChoiceIndexMeta).As<int>());
             }
             catch
             {
@@ -278,9 +228,9 @@ public partial class DialogFullscreen : VBoxContainer
 
     private void ClickChoice(int idx)
     {
-        if (story == null) return;
+        if (_story == null) return;
 
-        story.ChooseChoiceIndex(idx);
+        _story.ChooseChoiceIndex(idx);
 
         RemoveAllChoices();
         AddToStory(new HSeparator());
@@ -290,22 +240,22 @@ public partial class DialogFullscreen : VBoxContainer
 
     private void AddToStory(CanvasItem item)
     {
-        storyText.AddChild(item);
-        item.Owner = storyText;
+        _storyText.AddChild(item);
+        item.Owner = _storyText;
         // await ToSignal(GetTree(), "process_frame");
         // await ToSignal(GetTree(), "process_frame");
-        scroll.ScrollVertical = (int)scroll.GetVScrollBar().MaxValue;
+        _scroll.ScrollVertical = (int)_scroll.GetVScrollBar().MaxValue;
     }
 
     private void RemoveAllStoryContent()
     {
-        foreach (Node n in storyText.GetChildren())
+        foreach (Node n in _storyText.GetChildren())
             n.QueueFree();
     }
 
     private void RemoveAllChoices()
     {
-        foreach (Node n in storyChoices.GetChildren().OfType<Button>())
+        foreach (Node n in _storyChoices.GetChildren().OfType<Button>())
             n.QueueFree();
     }
 
