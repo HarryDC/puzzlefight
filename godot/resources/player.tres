@@ -10,6 +10,7 @@
 
 [resource]
 script = ExtResource("1_rjq7u")
+Name = "Baldy"
 HitPoints = 100
 MaxHitPoints = 100
 Armor = 3

@@ -7,7 +7,7 @@ using PuzzleFight.Spells;
 
 public partial class ScorePanel : PanelContainer
 {
-    
+    [Export] public Label NameLabel;
     [Export] public Label RedLabel;
     [Export] public Label GreenLabel;
     [Export] public Label BlueLabel;
@@ -66,7 +66,7 @@ public partial class ScorePanel : PanelContainer
     
     public void UpdateScores(Character character)
     {
-        foreach (var (type, count) in _character.Stash)
+        foreach (var (type, count) in character.Stash)
         {
             _scores[type].Score = count;
         }
@@ -80,6 +80,7 @@ public partial class ScorePanel : PanelContainer
 
     public void UpdateCharacter(Character character)
     {
+        NameLabel.Text = $"{character.Name}";
         HpLabel.Text = $"{character.HitPoints}";
         AcLabel.Text = $"{character.Armor}";
         AtkLabel.Text = $"{character.Attack}";

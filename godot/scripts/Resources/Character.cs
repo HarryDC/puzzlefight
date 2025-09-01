@@ -25,6 +25,7 @@ public partial class Character : Resource
         LeftHand,
         RightHand,
     }
+    [Export] public string Name { get; set; }
     [Export] public int HitPoints { get; set; }
     [Export] public int MaxHitPoints { get; set; }
     [Export] public int Armor { get; set; }

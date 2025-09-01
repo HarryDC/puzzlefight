@@ -1,15 +1,18 @@
-[gd_resource type="Resource" script_class="Character" load_steps=2 format=3 uid="uid://bhreung2ruu54"]
+[gd_resource type="Resource" script_class="Character" load_steps=4 format=3 uid="uid://bhreung2ruu54"]
 
+[ext_resource type="Script" uid="uid://dgty0b0h53itm" path="res://scripts/Resources/Equipment/Equipment.cs" id="1_pysl7"]
+[ext_resource type="Script" uid="uid://4pvhoeksvvvp" path="res://scripts/Resources/Spells/Spell.cs" id="2_agg0l"]
 [ext_resource type="Script" uid="uid://bpvabkd6ra6x0" path="res://scripts/Resources/Character.cs" id="3_v0o6i"]
 
 [resource]
 script = ExtResource("3_v0o6i")
+Name = "Crow"
 HitPoints = 20
 MaxHitPoints = 20
 Armor = 0
 Attack = 1
 Actions = 1
-Spells = []
-Equipment = []
-Equipped = {}
+Spells = Array[ExtResource("2_agg0l")]([])
+Equipment = Array[ExtResource("1_pysl7")]([])
+Equipped = Dictionary[int, ExtResource("1_pysl7")]({})
 metadata/_custom_type_script = "uid://bpvabkd6ra6x0"
