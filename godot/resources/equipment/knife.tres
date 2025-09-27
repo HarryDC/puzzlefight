@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Weapon" load_steps=3 format=3 uid="uid://d3bu811bogv7f"]
+
+[ext_resource type="Texture2D" uid="uid://uhco8d1p6qlk" path="res://assets/equipment/sword_0.png" id="1_w70kv"]
+[ext_resource type="Script" uid="uid://bt3ge0s3sva6a" path="res://scripts/Resources/Equipment/Weapon.cs" id="2_7lvdd"]
+
+[resource]
+script = ExtResource("2_7lvdd")
+Damage = 2
+Name = "Knife"
+Type = 1
+Slot = 0
+Image = ExtResource("1_w70kv")
+metadata/_custom_type_script = "uid://bt3ge0s3sva6a"

@@ -5,7 +5,8 @@
 
 [resource]
 script = ExtResource("1_m43er")
-Damage = 5
+Damage = 3
+Name = "Dagger"
 Type = 1
 Slot = 0
 Image = ExtResource("1_x4xoe")

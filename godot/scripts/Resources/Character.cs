@@ -25,6 +25,11 @@ public partial class Character : Resource
         LeftHand,
         RightHand,
     }
+
+    // CharacterAttributes ... fixed
+    // Weapon effects ... depend on inventory
+    // Spell effects ... time/round based
+    // Gem effects ... round based
     [Export] public string Name { get; set; }
     [Export] public int HitPoints { get; set; }
     [Export] public int MaxHitPoints { get; set; }

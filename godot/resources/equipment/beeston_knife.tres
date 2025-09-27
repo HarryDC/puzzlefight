@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Weapon" load_steps=3 format=3 uid="uid://fv3uefo4o4ik"]
+
+[ext_resource type="Texture2D" uid="uid://uhco8d1p6qlk" path="res://assets/equipment/sword_0.png" id="1_gej0v"]
+[ext_resource type="Script" uid="uid://bt3ge0s3sva6a" path="res://scripts/Resources/Equipment/Weapon.cs" id="2_g5tao"]
+
+[resource]
+script = ExtResource("2_g5tao")
+Damage = 1
+Name = "Bread Knife"
+Type = 1
+Slot = 0
+Image = ExtResource("1_gej0v")
+metadata/_custom_type_script = "uid://bt3ge0s3sva6a"

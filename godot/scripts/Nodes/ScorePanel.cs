@@ -1,5 +1,6 @@
 using Godot;
 using System.Collections.Generic;
+using System.Linq;
 using PuzzleFight.Common;
 using PuzzleFight.Nodes;
 using PuzzleFight.scripts.Resources;
@@ -14,6 +15,7 @@ public partial class ScorePanel : PanelContainer
     [Export] public Label HpLabel;
     [Export] public Label AcLabel;
     [Export] public Label AtkLabel;
+    [Export] public Label InventoryLabel;
 
     [Export] public Participant Participant;
     private Character _character;
@@ -76,6 +78,13 @@ public partial class ScorePanel : PanelContainer
     {
         UpdateCharacter(_character);
         UpdateScores(_character);
+        UpdateInventory(_character);
+    }
+
+    private void UpdateInventory(Character character)
+    {
+        var inventory = character.Equipment.Aggregate("", (current, item) => current + (item.Name + ", "));
+        InventoryLabel.Text = inventory;
     }
 
     public void UpdateCharacter(Character character)

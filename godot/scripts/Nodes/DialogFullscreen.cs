@@ -62,9 +62,9 @@ public partial class DialogFullscreen : VBoxContainer
                 parent.AddChild(_storyText);
                 _storyStarted = true;
                 ContinueStory();
-                if (GameManager.Instance.LastResult != "")
+                if (GameManager.Instance.NextChoice != "")
                 {
-                    FindAndExecute(GameManager.Instance.LastResult);
+                    FindAndExecute(GameManager.Instance.NextChoice);
                 }
                 _scroll.ScrollVertical = (int)_scroll.GetVScrollBar().MaxValue;
                 ContinueStory();
@@ -173,7 +173,7 @@ public partial class DialogFullscreen : VBoxContainer
         {
             GameManager.Instance.EncounterText = currentText;
             StoreNodeState(GameManager.Instance.GameGuid.ToString());
-            GameManager.Instance.DoEncounter();
+            GameManager.Instance.SwitchToEncounter();
         }
     }
     

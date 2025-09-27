@@ -20,6 +20,9 @@ public enum Slot
 public abstract partial class Equipment : Resource
 {
     [Export]
+    public string Name { get; protected set; }
+    
+    [Export]
     public Type Type { get; protected set; }
     
     [Export]

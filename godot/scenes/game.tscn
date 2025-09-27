@@ -109,7 +109,7 @@ grow_vertical = 0
 theme_override_font_sizes/font_size = 64
 text = "Defeat"
 
-[connection signal="ParticipantDeath" from="Opponent" to="." method="OnOpponentDeath"]
-[connection signal="ParticipantDeath" from="Player" to="." method="OnPlayerDeath"]
+[connection signal="ParticipantDeath" from="Opponent" to="." method="OnPlayerDeath"]
+[connection signal="ParticipantDeath" from="Player" to="." method="OnOpponentDeath"]
 [connection signal="button_down" from="Control/VictoryButton" to="." method="OnOpponentDeath"]
 [connection signal="button_down" from="Control/DefeatButton" to="." method="OnPlayerDeath"]
